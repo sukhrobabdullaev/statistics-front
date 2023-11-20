@@ -1,14 +1,31 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { useState } from "react";
+import { Form, Input, Button, Checkbox } from "antd";
 
-const onFinish = (values) => {
-  console.log("Success:", values);
-};
+const LoginForm = () => {
+  const [form] = Form.useForm();
 
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+  const onFinish = async (values) => {
+    try {
+      const response = await fetch("https://reportx.hsat.uz/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
 
-const Home = () => {
+      if (response.ok) {
+        console.log("Login successful!");
+        // Handle successful login here (e.g., redirect the user)
+      } else {
+        console.error("Login failed.");
+        // Handle login failure (display error message, etc.)
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
+  };
+
   return (
     <div className="flex justify-center items-center flex-col h-screen bg-blue-100">
       <img src="icons/HSAT_logo.png" alt="HSAT logo" className="w-24 h-24" />
@@ -16,13 +33,13 @@ const Home = () => {
         Toshkent shahar statistika <br /> boshqarmasi
       </h3>
       <Form
+        form={form}
         className="bg-white rounded-[14px] border p-24 shadow-md flex flex-col"
         name="basic"
         initialValues={{
           remember: false,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="on"
       >
         <h3 className="text-center pb-6 text-lg text-gray-600 font-bold animate animation-moveLeftToRight">
@@ -33,11 +50,11 @@ const Home = () => {
           rules={[
             {
               required: true,
-              message: "Iltimos loginni kiriting!",
+              message: "Please input your username!",
             },
           ]}
         >
-          <Input placeholder="Login" className="p-2 w-[250px]" />
+          <Input placeholder="Username" className="p-2 w-[250px]" />
         </Form.Item>
 
         <Form.Item
@@ -45,20 +62,20 @@ const Home = () => {
           rules={[
             {
               required: true,
-              message: "Iltimos parolni kiriting!",
+              message: "Please input your password!",
             },
           ]}
         >
-          <Input.Password placeholder="Parol" className="p-2" />
+          <Input.Password placeholder="Password" className="p-2" />
         </Form.Item>
 
         <Form.Item name="remember" valuePropName="checked">
-          <Checkbox>Meni eslab qol!</Checkbox>
+          <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
         <Form.Item>
           <Button type="primary" htmlType="submit" className="bg-blue-600">
-            Kirish
+            Login
           </Button>
         </Form.Item>
       </Form>
@@ -66,4 +83,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LoginForm;
