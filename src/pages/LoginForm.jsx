@@ -1,28 +1,26 @@
-import { useState } from "react";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button } from "antd";
+import axiosInstance from "../services/api";
 
 const LoginForm = () => {
-  const [form] = Form.useForm();
-
   const onFinish = async (values) => {
     try {
-      const response = await fetch("https://reportx.hsat.uz/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
+      const response = await axiosInstance.post("/docs/login", {
+        username: values.username,
+        password: values.password,
       });
 
-      if (response.ok) {
-        console.log("Login successful!");
-        // Handle successful login here (e.g., redirect the user)
-      } else {
-        console.error("Login failed.");
-        // Handle login failure (display error message, etc.)
-      }
+      const { access, refresh } = response.data;
+
+      // Store tokens securely (e.g., in local storage)
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+
+      // Redirect to a dashboard or another page upon successful login
+      // Replace '/dashboard' with your desired route
+      window.location.replace("/dashboard");
     } catch (error) {
-      console.error("Error occurred:", error);
+      console.error("Login failed:", error);
+      // Handle login failure
     }
   };
 
@@ -33,12 +31,8 @@ const LoginForm = () => {
         Toshkent shahar statistika <br /> boshqarmasi
       </h3>
       <Form
-        form={form}
         className="bg-white rounded-[14px] border p-24 shadow-md flex flex-col"
-        name="basic"
-        initialValues={{
-          remember: false,
-        }}
+        name="login-form"
         onFinish={onFinish}
         autoComplete="on"
       >
@@ -67,10 +61,6 @@ const LoginForm = () => {
           ]}
         >
           <Input.Password placeholder="Password" className="p-2" />
-        </Form.Item>
-
-        <Form.Item name="remember" valuePropName="checked">
-          <Checkbox>Remember me</Checkbox>
         </Form.Item>
 
         <Form.Item>
