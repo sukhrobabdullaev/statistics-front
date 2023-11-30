@@ -1,26 +1,47 @@
-import { Form, Input, Button } from "antd";
-import axiosInstance from "../services/api";
+import { Form, Input, Button, message } from "antd";
+import axios from "axios";
+import { useState } from "react";
+
+const BASE_URL = "https://reportx.hsat.uz";
 
 const LoginForm = () => {
+  const [loading, setLoading] = useState(false);
+
   const onFinish = async (values) => {
+    setLoading(true);
     try {
-      const response = await axiosInstance.post("/docs/login", {
-        username: values.username,
-        password: values.password,
+      const response = await fetch(`${BASE_URL}/docs/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: values.username,
+          password: values.password,
+        }),
       });
 
-      const { access, refresh } = response.data;
+      const data = await response.json();
 
-      // Store tokens securely (e.g., in local storage)
-      localStorage.setItem("access_token", access);
-      localStorage.setItem("refresh_token", refresh);
+      if (response.ok) {
+        const { access, refresh } = data;
 
-      // Redirect to a dashboard or another page upon successful login
-      // Replace '/dashboard' with your desired route
-      window.location.replace("/dashboard");
+        // Store tokens securely (e.g., in local storage)
+        localStorage.setItem("access_token", access);
+        localStorage.setItem("refresh_token", refresh);
+
+        // Redirect to a dashboard or another page upon successful login
+        // Replace '/dashboard' with your desired route
+        window.location.replace("/dashboard");
+      } else {
+        throw new Error("Login failed");
+      }
     } catch (error) {
       console.error("Login failed:", error);
+      message.error("Login failed. Please check your credentials.");
       // Handle login failure
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,7 +55,6 @@ const LoginForm = () => {
         className="bg-white rounded-[14px] border p-24 shadow-md flex flex-col"
         name="login-form"
         onFinish={onFinish}
-        autoComplete="on"
       >
         <h3 className="text-center pb-6 text-lg text-gray-600 font-bold animate animation-moveLeftToRight">
           HSAT
@@ -64,7 +84,12 @@ const LoginForm = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="bg-blue-600">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="bg-blue-600"
+            loading={loading}
+          >
             Login
           </Button>
         </Form.Item>
