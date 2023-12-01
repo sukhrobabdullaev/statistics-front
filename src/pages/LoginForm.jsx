@@ -1,5 +1,5 @@
 import { Form, Input, Button, message } from "antd";
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
 
 const BASE_URL = "https://reportx.hsat.uz";
@@ -10,7 +10,7 @@ const LoginForm = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/docs/login`, {
+      const response = await fetch(`${BASE_URL}/account/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
