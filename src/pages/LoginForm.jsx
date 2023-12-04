@@ -1,5 +1,5 @@
 import { Form, Input, Button, message } from "antd";
-// import axios from "axios";
+import axios from "axios";
 import { useState } from "react";
 
 const BASE_URL = "https://reportx.hsat.uz";
@@ -10,21 +10,13 @@ const LoginForm = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/account/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: values.username,
-          password: values.password,
-        }),
+      const response = await axios.post(`${BASE_URL}/account/login`, {
+        username: values.username,
+        password: values.password,
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        const { access, refresh } = data;
+      if (response.status === 200) {
+        const { access, refresh } = response.data;
 
         // Store tokens securely (e.g., in local storage)
         localStorage.setItem("access_token", access);
@@ -55,6 +47,9 @@ const LoginForm = () => {
         className="bg-white rounded-[14px] border p-24 shadow-md flex flex-col"
         name="login-form"
         onFinish={onFinish}
+        initialValues={{
+          csrfmiddlewaretoken: "{{ csrf_token }}", // Include this line for CSRF token
+        }}
       >
         <h3 className="text-center pb-6 text-lg text-gray-600 font-bold animate animation-moveLeftToRight">
           HSAT
