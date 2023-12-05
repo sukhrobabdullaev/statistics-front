@@ -14,12 +14,11 @@ import Content3 from "../components/Contents/Content3";
 const { Header, Sider, Content } = Layout;
 
 const Main = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+  const [selectedItem, setSelectedItem] = useState("1");
   const {
     token: { colorBgContainer },
   } = theme.useToken();
-
-  const [selectedItem, setSelectedItem] = useState("1");
 
   const handleMenuItemClick = (key) => {
     setSelectedItem(key);
