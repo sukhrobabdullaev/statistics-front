@@ -7,7 +7,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import Content1 from "../components/Contents/Content1";
 import Content2 from "../components/Contents/Content2";
 import Content3 from "../components/Contents/Content3";
@@ -16,6 +16,7 @@ const { Header, Sider, Content } = Layout;
 const Main = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [selectedItem, setSelectedItem] = useState("1");
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -23,13 +24,14 @@ const Main = () => {
   const handleMenuItemClick = (key) => {
     setSelectedItem(key);
   };
+
   return (
     <Layout>
-      <Helmet>
+      <HelmetProvider>
         <meta charSet="utf-8" />
         <title>Admin Panel</title>
         <link rel="canonical" href="http://hsat.uz/adminPanel" />
-      </Helmet>
+      </HelmetProvider>
       <Sider trigger={null} collapsible collapsed={!collapsed} className="pt-3">
         <Menu
           mode="inline"
@@ -41,17 +43,17 @@ const Main = () => {
             {
               key: "1",
               icon: <UserOutlined />,
-              label: "Hujjatlar",
+              label: "Asosiy Panel",
             },
             {
               key: "2",
               icon: <VideoCameraOutlined />,
-              label: "documents",
+              label: "KTYADR bazasi",
             },
             {
               key: "3",
               icon: <UploadOutlined />,
-              label: "something",
+              label: "Hisobotlar ro'yxati",
             },
           ]}
         />

@@ -32,14 +32,17 @@ const LoginForm = () => {
         localStorage.setItem("access_token", access);
         localStorage.setItem("refresh_token", refresh);
 
-        window.location.replace("/dashboard");
+        setTimeout(() => {
+          setLoading(false);
+          window.location.replace("/dashboard");
+        }, 1500);
       } else {
         throw new Error("Login failed");
       }
     } catch (error) {
       console.error("Login failed:", error);
       message.error("Login failed. Please check your credentials.");
-      // Handle login failure
+      setLoading(false);
     } finally {
       setLoading(false);
     }
