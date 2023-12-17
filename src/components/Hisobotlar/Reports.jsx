@@ -1,5 +1,6 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 const columns1 = [
   { field: "id", headerName: "ID", width: 70 },
@@ -61,6 +62,12 @@ const rows3 = [
 ];
 
 export default function Reports() {
+  const navigate = useNavigate();
+
+  const handleClickRow = (params) => {
+    const id = params.row.id;
+    navigate(`/revison/${id}`);
+  };
   return (
     <div className="flex gap-5">
       <div style={{ height: "100%", width: "30%" }}>
@@ -72,6 +79,7 @@ export default function Reports() {
               paginationModel: { page: 0, pageSize: 5 },
             },
           }}
+          onRowClick={handleClickRow}
         />
       </div>
       <div style={{ height: "100%", width: "30%" }}>
@@ -83,6 +91,7 @@ export default function Reports() {
               paginationModel: { page: 0, pageSize: 5 },
             },
           }}
+          onRowClick={handleClickRow}
         />
       </div>
       <div style={{ height: "100%", width: "30%" }}>
@@ -94,6 +103,7 @@ export default function Reports() {
               paginationModel: { page: 0, pageSize: 5 },
             },
           }}
+          onRowClick={handleClickRow}
         />
       </div>
     </div>

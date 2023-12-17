@@ -32,7 +32,7 @@ const Navbar = () => {
 
   return (
     <div className="p-2 flex justify-between items-center">
-      <img src="imgs/panel_hsat_logo.png" alt="hsat logo" className="w-28" />
+      <img src="/imgs/panel_hsat_logo.png" alt="hsat logo" className="w-28" />
       <div className="flex items-center gap-2 pr-4">
         <Link className="relative">
           <MdOutlineNotificationsNone
