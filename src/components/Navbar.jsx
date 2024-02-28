@@ -10,16 +10,20 @@ import { MdOutlineNotificationsNone } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const token = localStorage.getItem("access_token");
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/", { replace: true });
     window.location.reload();
   };
+
+  const decodedToken = jwtDecode(token);
 
   // mui configs
   const open = Boolean(anchorEl);
@@ -95,7 +99,7 @@ const Navbar = () => {
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
             <MenuItem onClick={handleClose}>
-              <Avatar /> Admin
+              <Avatar /> {decodedToken.username}
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout}>

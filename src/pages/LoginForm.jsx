@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLoader from "../components/AppLoader";
+import { jwtDecode } from "jwt-decode";
 
 const BASE_URL = "https://reportx.hsat.uz";
 
@@ -11,9 +12,24 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (token) {
-      navigate("/dashboard");
+      try {
+        const decodedToken = jwtDecode(token);
+        // Check user role from decoded token
+        if (decodedToken.is_admin) {
+          navigate("/admin-dashboard");
+        } else if (decodedToken.is_staff) {
+          navigate("/staff-dashboard");
+        } else {
+          navigate("/user-dashboard");
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        navigate("/login"); // Redirect to login if decoding fails
+      }
+    } else {
+      navigate("/"); // Redirect to login if token doesn't exist
     }
   }, [navigate]);
 
@@ -32,10 +48,15 @@ const LoginForm = () => {
         localStorage.setItem("access_token", access);
         localStorage.setItem("refresh_token", refresh);
 
-        setTimeout(() => {
-          setLoading(false);
-          window.location.replace("/dashboard");
-        }, 1500);
+        const decodedToken = jwtDecode(access);
+        console.log(decodedToken);
+        if (decodedToken.is_staff) {
+          navigate("/staff-dashboard");
+        } else if (decodedToken.is_boss) {
+          navigate("/boss-dashboard");
+        } else {
+          navigate("admin");
+        }
       } else {
         throw new Error("Login failed");
       }

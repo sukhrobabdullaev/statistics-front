@@ -25,6 +25,7 @@ const Main = () => {
     setSelectedItem(key);
   };
 
+  console.log(localStorage.getItem("access_token"));
   return (
     <Layout>
       <HelmetProvider>

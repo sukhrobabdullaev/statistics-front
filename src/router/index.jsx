@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     element: <LoginForm />,
   },
   {
-    path: "/dashboard",
+    path: "/staff-dashboard",
     element: (
       <RootLayout>
         <Main />
