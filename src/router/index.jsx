@@ -18,6 +18,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/boss-dashboard",
+    element: (
+      <RootLayout>
+        <Main />
+      </RootLayout>
+    ),
+  },
+  {
     path: "/revison/:id",
     element: (
       <RootLayout>

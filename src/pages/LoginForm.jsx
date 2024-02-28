@@ -4,34 +4,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppLoader from "../components/AppLoader";
 import { jwtDecode } from "jwt-decode";
-
-const BASE_URL = "https://reportx.hsat.uz";
+import { BASE_URL } from "../helpers";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        // Check user role from decoded token
-        if (decodedToken.is_admin) {
-          navigate("/admin-dashboard");
-        } else if (decodedToken.is_staff) {
-          navigate("/staff-dashboard");
-        } else {
-          navigate("/user-dashboard");
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        navigate("/login"); // Redirect to login if decoding fails
-      }
-    } else {
-      navigate("/"); // Redirect to login if token doesn't exist
-    }
-  }, [navigate]);
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -49,11 +26,13 @@ const LoginForm = () => {
         localStorage.setItem("refresh_token", refresh);
 
         const decodedToken = jwtDecode(access);
-        console.log(decodedToken);
+
         if (decodedToken.is_staff) {
-          navigate("/staff-dashboard");
+          navigate("/staff-dashboard", { replace: true });
+          window.location.reload();
         } else if (decodedToken.is_boss) {
-          navigate("/boss-dashboard");
+          navigate("/boss-dashboard", { replace: true });
+          window.location.reload();
         } else {
           navigate("admin");
         }
@@ -61,7 +40,7 @@ const LoginForm = () => {
         throw new Error("Login failed");
       }
     } catch (error) {
-      console.error("Login failed:", error);
+      // console.error("Login failed:", error);
       message.error("Login failed. Please check your credentials.");
       setLoading(false);
     } finally {

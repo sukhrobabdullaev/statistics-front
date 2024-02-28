@@ -18,9 +18,9 @@ const Navbar = () => {
   const token = localStorage.getItem("access_token");
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     navigate("/", { replace: true });
-    window.location.reload();
   };
 
   const decodedToken = jwtDecode(token);

@@ -5,12 +5,14 @@ import {
   UploadOutlined,
   VideoCameraOutlined,
   UserOutlined,
+  UsergroupDeleteOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import Content1 from "../components/Contents/Content1";
 import Content2 from "../components/Contents/Content2";
 import Content3 from "../components/Contents/Content3";
+import { decodedToken } from "../helpers";
 const { Header, Sider, Content } = Layout;
 
 const Main = () => {
@@ -25,7 +27,14 @@ const Main = () => {
     setSelectedItem(key);
   };
 
-  console.log(localStorage.getItem("access_token"));
+  // console.log(decodedToken);
+  const iconMenu3 = !decodedToken.is_boss ? (
+    <UsergroupDeleteOutlined />
+  ) : (
+    <UploadOutlined />
+  );
+  const labelMenu3 = decodedToken.is_boss ? "Bo'limlar" : "Hisobotlar ro'yxati";
+
   return (
     <Layout>
       <HelmetProvider>
@@ -53,8 +62,8 @@ const Main = () => {
             },
             {
               key: "3",
-              icon: <UploadOutlined />,
-              label: "Hisobotlar ro'yxati",
+              icon: iconMenu3,
+              label: labelMenu3,
             },
           ]}
         />
