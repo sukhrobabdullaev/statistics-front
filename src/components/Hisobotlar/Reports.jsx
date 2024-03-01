@@ -1,57 +1,16 @@
-import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../helpers";
-
-const rows1 = [
-  { id: 1, name: "1" },
-  { id: 2, name: "Cersei" },
-  { id: 3, name: "Cersei" },
-  { id: 4, name: "Cersei" },
-  { id: 5, name: "Cersei" },
-  { id: 6, name: "Cersei" },
-  { id: 7, name: "Cersei" },
-  { id: 8, name: "Cersei" },
-  { id: 9, name: "Cersei" },
-  { id: 10, name: "Cersei" },
-  { id: 11, name: "Cersei" },
-  { id: 12, name: "Cersei" },
-  { id: 13, name: "Cersei" },
-];
-const rows2 = [
-  { id: 1, name: "2" },
-  { id: 2, name: "Cersei" },
-  { id: 3, name: "Cersei" },
-  { id: 4, name: "Cersei" },
-  { id: 5, name: "Cersei" },
-  { id: 6, name: "Cersei" },
-  { id: 7, name: "Cersei" },
-  { id: 8, name: "Cersei" },
-  { id: 9, name: "Cersei" },
-  { id: 10, name: "Cersei" },
-  { id: 11, name: "Cersei" },
-  { id: 12, name: "Cersei" },
-  { id: 13, name: "Cersei" },
-];
-const rows3 = [
-  { id: 1, name: "2" },
-  { id: 2, name: "Cersei" },
-  { id: 3, name: "Cersei" },
-  { id: 4, name: "Cersei" },
-  { id: 5, name: "Cersei" },
-  { id: 6, name: "Cersei" },
-  { id: 7, name: "Cersei" },
-  { id: 8, name: "Cersei" },
-  { id: 9, name: "Cersei" },
-  { id: 10, name: "Cersei" },
-  { id: 11, name: "Cersei" },
-  { id: 12, name: "Cersei" },
-  { id: 13, name: "Cersei" },
-];
+import { useState } from "react";
+import { useEffect } from "react";
 
 export default function Reports() {
-  const [letters, setLetters] = React.useState([]);
+  const [letters, setLetters] = useState([]);
+  const [rows1, setRows1] = useState([]);
+  const [rows2, setRows2] = useState([]);
+  const [rows3, setRows3] = useState([]);
+
   const navigate = useNavigate();
 
   const handleClickRow = (params) => {
@@ -59,14 +18,39 @@ export default function Reports() {
     navigate(`/revison/${id}`);
   };
 
-  React.useEffect(() => {
+  let token = localStorage.getItem("access_token");
+
+  useEffect(() => {
     async function getData() {
       try {
-        const response = await axios.get(`${BASE_URL}/mainletter/typeletter/`);
-        setLetters(response.data.results);
+        const idsResponse = await axios.get(
+          `${BASE_URL}/mainletter/typeletter/`
+        );
+        const ids = idsResponse?.data?.results;
+        setLetters(ids);
+
+        const promises = ids.map((id) =>
+          axios.get(`${BASE_URL}/mainletter/typeletter/${id.id}/`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+        );
+
+        const responses = await Promise.all(promises);
+        const data = responses.map((response) => response.data);
+
+        const rowsData = data.map((dataItem) =>
+          dataItem.map((row) => ({
+            id: row.id,
+            name: row.title,
+          }))
+        );
+        setRows1(rowsData[0]);
+        setRows2(rowsData[1]);
+        setRows3(rowsData[2]);
       } catch (error) {
-        console.error("Login failed:", error);
-        message.error("Login failed. Please check your credentials.");
+        console.error("Fetching data failed:", error);
       }
     }
     getData();
@@ -93,7 +77,7 @@ export default function Reports() {
           columns={columns1}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { pageSize: 5 },
             },
           }}
           onRowClick={handleClickRow}

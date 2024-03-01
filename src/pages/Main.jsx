@@ -8,7 +8,6 @@ import {
   UsergroupDeleteOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
-import { Helmet, HelmetProvider } from "react-helmet-async";
 import Content1 from "../components/Contents/Content1";
 import Content2 from "../components/Contents/Content2";
 import Content3 from "../components/Contents/Content3";
@@ -37,11 +36,6 @@ const Main = () => {
 
   return (
     <Layout>
-      <HelmetProvider>
-        <meta charSet="utf-8" />
-        <title>Admin Panel</title>
-        <link rel="canonical" href="http://hsat.uz/adminPanel" />
-      </HelmetProvider>
       <Sider trigger={null} collapsible collapsed={!collapsed} className="pt-3">
         <Menu
           mode="inline"
