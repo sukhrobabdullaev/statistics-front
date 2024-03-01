@@ -40,19 +40,17 @@ export default function Reports() {
         const ids = idsResponse?.data?.results;
         setLetters(ids);
 
-        if (searchParams.get("template_id")) {
-          const res = await axios.get(
-            `${BASE_URL}/mainletter/typeletter/${searchParams.get(
-              "template_id"
-            )}/`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setRows(res.data);
-        }
+        const res = await axios.get(
+          `${BASE_URL}/mainletter/typeletter/${
+            searchParams.get("template_id") || "1"
+          }/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setRows(res.data);
       } catch (error) {
         console.error("Fetching data failed:", error);
       }

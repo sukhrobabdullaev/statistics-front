@@ -25,6 +25,7 @@ const Main = () => {
   );
 
   const navigate = useNavigate();
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
