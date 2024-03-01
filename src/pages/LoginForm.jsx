@@ -28,13 +28,15 @@ const LoginForm = () => {
         const decodedToken = jwtDecode(access);
 
         if (decodedToken.is_staff) {
-          navigate("/staff-dashboard", { replace: true });
+          navigate("/staff-dashboard", {
+            replace: true,
+          });
           window.location.reload();
         } else if (decodedToken.is_boss) {
           navigate("/boss-dashboard", { replace: true });
           window.location.reload();
         } else {
-          navigate("admin");
+          navigate("/");
         }
       } else {
         throw new Error("Login failed");

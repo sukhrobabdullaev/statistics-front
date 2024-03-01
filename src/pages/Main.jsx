@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -12,21 +12,33 @@ import Content1 from "../components/Contents/Content1";
 import Content2 from "../components/Contents/Content2";
 import Content3 from "../components/Contents/Content3";
 import { decodedToken } from "../helpers";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
 const { Header, Sider, Content } = Layout;
 
 const Main = () => {
   const [collapsed, setCollapsed] = useState(true);
-  const [selectedItem, setSelectedItem] = useState("1");
+  let [searchParams] = useSearchParams();
 
+  const [selectedItem, setSelectedItem] = useState(
+    searchParams.get("step_id") || "1"
+  );
+
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const handleMenuItemClick = (key) => {
+    searchParams.set("step_id", key);
+    if (searchParams) {
+      const newUrl = `${window.location.pathname}?step_id=${key}`;
+      navigate(newUrl);
+    }
+
     setSelectedItem(key);
   };
 
-  // console.log(decodedToken);
   const iconMenu3 = !decodedToken.is_boss ? (
     <UsergroupDeleteOutlined />
   ) : (

@@ -2,20 +2,26 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../helpers";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export default function Reports() {
   const [letters, setLetters] = useState([]);
-  const [rows1, setRows1] = useState([]);
-  const [rows2, setRows2] = useState([]);
-  const [rows3, setRows3] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [letterName, setLetterName] = useState(null);
 
+  let [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const handleClickRow = (params) => {
     const id = params.row.id;
     navigate(`/revison/${id}`);
+  };
+
+  const selectId = (id) => {
+    localStorage.setItem("template_id", id);
+    const newUrl = `${window.location.pathname}?step_id=3&template_id=${id}`;
+    navigate(newUrl);
   };
 
   let token = localStorage.getItem("access_token");
@@ -24,84 +30,65 @@ export default function Reports() {
     async function getData() {
       try {
         const idsResponse = await axios.get(
-          `${BASE_URL}/mainletter/typeletter/`
+          `${BASE_URL}/mainletter/typeletter/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const ids = idsResponse?.data?.results;
         setLetters(ids);
 
-        const promises = ids.map((id) =>
-          axios.get(`${BASE_URL}/mainletter/typeletter/${id.id}/`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-        );
-
-        const responses = await Promise.all(promises);
-        const data = responses.map((response) => response.data);
-
-        const rowsData = data.map((dataItem) =>
-          dataItem.map((row) => ({
-            id: row.id,
-            name: row.title,
-          }))
-        );
-        setRows1(rowsData[0]);
-        setRows2(rowsData[1]);
-        setRows3(rowsData[2]);
+        if (searchParams.get("template_id")) {
+          const res = await axios.get(
+            `${BASE_URL}/mainletter/typeletter/${searchParams.get(
+              "template_id"
+            )}/`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setRows(res.data);
+        }
       } catch (error) {
         console.error("Fetching data failed:", error);
       }
     }
-    getData();
-  }, []);
 
-  const columns1 = [
+    getData();
+  }, [searchParams.get("template_id")]);
+
+  console.log(rows);
+  const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "name", headerName: letters[0]?.name, width: 130 },
-  ];
-  const columns2 = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "name", headerName: letters[1]?.name, width: 130 },
-  ];
-  const columns3 = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "name", headerName: letters[2]?.name, width: 130 },
+    { field: "title", headerName: letterName, width: 200 },
   ];
 
   return (
-    <div className="flex gap-5">
-      <div style={{ height: "100%", width: "30%" }}>
+    <div className="flex flex-col gap-5">
+      <div className="flex gap-2">
+        {letters.map((letter) => (
+          <button
+            key={letter.id}
+            onClick={() => {
+              setLetterName(letter.name);
+              selectId(letter.id);
+            }}
+          >
+            {letter.name}
+          </button>
+        ))}
+      </div>
+      <div style={{ height: "100%", width: "70%" }}>
         <DataGrid
-          rows={rows1}
-          columns={columns1}
+          rows={rows}
+          columns={columns}
           initialState={{
             pagination: {
               paginationModel: { pageSize: 5 },
-            },
-          }}
-          onRowClick={handleClickRow}
-        />
-      </div>
-      <div style={{ height: "100%", width: "30%" }}>
-        <DataGrid
-          rows={rows2}
-          columns={columns2}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          onRowClick={handleClickRow}
-        />
-      </div>
-      <div style={{ height: "100%", width: "30%" }}>
-        <DataGrid
-          rows={rows3}
-          columns={columns3}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
             },
           }}
           onRowClick={handleClickRow}

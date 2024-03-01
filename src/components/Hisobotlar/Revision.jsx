@@ -2,7 +2,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { plugins } from "../../constants/plugins";
 import { toolbars } from "../../constants/toolbar";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { BASE_URL } from "../../helpers";
 import axios from "axios";
 
@@ -13,29 +13,21 @@ const Revision = () => {
   const params = useParams();
   let token = localStorage.getItem("access_token");
 
+  const templateId = localStorage.getItem("template_id");
+
   useEffect(() => {
     async function getData() {
       try {
-        const idsResponse = await axios.get(
-          `${BASE_URL}/mainletter/typeletter/`
-        );
-        const ids = idsResponse?.data?.results;
-
-        const promises = ids.map((id) =>
-          axios.get(
-            `${BASE_URL}/mainletter/typeletter/${id?.id}/${params?.id}/`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
+        const res = await axios.get(
+          `${BASE_URL}/mainletter/typeletter/${templateId}/${params?.id}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
-        const responses = await Promise.all(promises);
-        console.log(responses);
-        const data = responses.map((response) => response.data);
-        setTemplate(data);
+        setTemplate(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -43,10 +35,10 @@ const Revision = () => {
     getData();
   }, []);
 
-  // console.log(template);
+  console.log(template);
   return (
     <div className="max-w-[1200px] mx-auto mt-5">
-      <h1>Revision</h1>
+      <h1>{template.title}</h1>
       <Editor
         apiKey={API_KEY}
         init={{
@@ -63,7 +55,7 @@ const Revision = () => {
               Promise.reject("See docs to implement AI Assistant")
             ),
         }}
-        initialValue="<h1 style='color:red;text-align:center'>salom</h1>"
+        initialValue={template.body}
       />
     </div>
   );
