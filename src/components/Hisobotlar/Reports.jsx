@@ -11,6 +11,7 @@ export default function Reports() {
   const [rows, setRows] = useState([]);
   const [letterName, setLetterName] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState(1);
 
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function Reports() {
 
   const selectId = (id) => {
     localStorage.setItem("template_id", id);
+    setSelectedId(id);
     const newUrl = `${window.location.pathname}?step_id=3&template_id=${id}`;
     navigate(newUrl);
   };
@@ -71,27 +73,29 @@ export default function Reports() {
 
   return (
     <>
-      {loading ? (
-        <AppLoader />
-      ) : (
-        <div className="flex flex-col gap-5">
-          <div className="flex gap-2">
-            {letters.map((letter) => (
-              <button
-                key={letter.id}
-                onClick={() => {
-                  setLetterName(letter.name);
-                  selectId(letter.id);
-                }}
-              >
-                {letter.name}
-              </button>
-            ))}
-          </div>
-
+      <div className="flex flex-col gap-5">
+        <div className="flex gap-2">
+          {letters.map((letter) => (
+            <button
+              className={`p-2 rounded-lg  ${
+                selectedId === letter.id ? "bg-blue-400" : "bg-blue-200"
+              }`}
+              key={letter.id}
+              onClick={() => {
+                setLetterName(letter.name);
+                selectId(letter.id);
+              }}
+            >
+              {letter.name}
+            </button>
+          ))}
+        </div>
+        {loading ? (
+          <AppLoader />
+        ) : (
           <div style={{ height: "100%", width: "70%" }}>
             <DataGrid
-              disableColumnMenu
+              // disableColumnMenu
               rows={rows}
               columns={columns}
               // initialState={{
@@ -99,12 +103,12 @@ export default function Reports() {
               //     paginationModel: { pageSize: 5 },
               //   },
               // }}
-              // pageSizeOptions={[5]}
+              pageSizeOptions={[5]}
               onRowClick={handleClickRow}
             />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 }

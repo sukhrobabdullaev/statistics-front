@@ -11,19 +11,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { decodedToken } from "../helpers";
+import { Badge } from "@mui/material";
 
 const Navbar = () => {
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const token = localStorage.getItem("access_token");
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
+    localStorage.removeItem("template_id");
     navigate("/", { replace: true });
   };
-
-  const decodedToken = jwtDecode(token);
 
   // mui configs
   const open = Boolean(anchorEl);
@@ -35,20 +35,22 @@ const Navbar = () => {
   };
 
   return (
-    <div className="p-2 flex justify-between items-center">
-      <img src="/imgs/panel_hsat_logo.png" alt="hsat logo" className="w-28" />
+    <div className="p-2 max-w-[1400px] mx-auto flex justify-between items-center">
+      <Link to={decodedToken.is_staff ? "/staff-dashboard" : "boss-dashboard"}>
+        <img src="/imgs/panel_hsat_logo.png" alt="hsat logo" className="w-28" />
+      </Link>
       <div className="flex items-center gap-2 pr-4">
-        <Link className="relative">
-          <MdOutlineNotificationsNone
-            size={25}
-            className="text-gray-600 hover:text-black transition-all "
-          />
-          <span className="rounded-full text-white text-sm w-4 h-4 bg-red-500 text-center absolute top-0 right-0">
-            4
-          </span>
+        <Link>
+          <Badge badgeContent={4} color="primary">
+            <MdOutlineNotificationsNone
+              color="action"
+              size={23}
+              className="text-gray-600 hover:text-black transition-all "
+            />
+          </Badge>
         </Link>
         <Link>
-          <Tooltip title="Mening accountim">
+          <Tooltip title="Mening hisobim">
             <IconButton
               onClick={handleClick}
               size="small"
