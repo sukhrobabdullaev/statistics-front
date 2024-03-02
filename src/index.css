@@ -3,31 +3,32 @@
 @tailwind utilities;
 
 .ant-layout-sider {
-  background-color: white!important;
+  background-color: white !important;
 }
 @keyframes moveLeftToRight {
-    0%, 100% {
-      transform: translateX(-50%);
-    }
-    50% {
-      transform: translateX(50%);
-    }
+  0%,
+  100% {
+    transform: translateX(-50%);
   }
-  
-  @keyframes moveRightToLeft {
-    0%, 100% {
-      transform: translateX(100%);
-    }
-    50% {
-      transform: translateX(-100%);
-    }
+  50% {
+    transform: translateX(50%);
   }
-  
-  .animation-moveLeftToRight {
-    animation: moveLeftToRight 6s linear infinite; /* Adjust the duration as needed */
+}
+
+@keyframes moveRightToLeft {
+  0%,
+  100% {
+    transform: translateX(100%);
   }
-  
-  .animation-moveRightToLeft {
-    animation: moveRightToLeft 3s linear infinite; /* Adjust the duration as needed */
+  50% {
+    transform: translateX(-100%);
   }
-  
+}
+
+.animation-moveLeftToRight {
+  animation: moveLeftToRight 6s linear infinite; /* Adjust the duration as needed */
+}
+
+.animation-moveRightToLeft {
+  animation: moveRightToLeft 3s linear infinite; /* Adjust the duration as needed */
+}

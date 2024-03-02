@@ -1,5 +1,4 @@
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 const RootLayout = ({ children }) => {
   return (
@@ -8,7 +7,6 @@ const RootLayout = ({ children }) => {
         <Navbar />
       </header>
       <main>{children}</main>
-      {/* <Footer /> */}
     </>
   );
 };
