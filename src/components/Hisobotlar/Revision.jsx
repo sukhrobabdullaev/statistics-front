@@ -1,21 +1,41 @@
 import { Editor } from "@tinymce/tinymce-react";
-import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { forwardRef, useEffect, useState } from "react";
+import Slide from "@mui/material/Slide";
+import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../helpers";
 import axios from "axios";
 import AppLoader from "../AppLoader";
+import AlertDialogSlide from "./Modal";
 
 const API_KEY = "p2mdh6c2rib3n2knlak74u4778yb0659xt2hvdjkso2sizio";
+
+export const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const Revision = () => {
   const [template, setTemplate] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const params = useParams();
+  const navigate = useNavigate();
   let token = localStorage.getItem("access_token");
 
   const templateId = localStorage.getItem("template_id");
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSave = () => {
+    navigate("inn_upload");
+    setOpen(false);
+  };
   useEffect(() => {
     setLoading(true);
     async function getData() {
@@ -59,9 +79,18 @@ const Revision = () => {
             }}
             initialValue={template.body}
           />
-          <button className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+
+          <button
+            className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            onClick={handleClickOpen}
+          >
             Saqlash
           </button>
+          <AlertDialogSlide
+            open={open}
+            handleClose={handleClose}
+            handleSave={handleSave}
+          />
         </div>
       )}
     </>

@@ -3,6 +3,7 @@ import RootLayout from "../layout/RootLayout";
 import Main from "../pages/Main";
 import LoginForm from "../pages/LoginForm";
 import Revision from "../components/Hisobotlar/Revision";
+import InnUpload from "../components/Hisobotlar/InnUpload";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,14 @@ const router = createBrowserRouter([
     element: (
       <RootLayout>
         <Revision />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/revison/:id/inn_upload",
+    element: (
+      <RootLayout>
+        <InnUpload />
       </RootLayout>
     ),
   },

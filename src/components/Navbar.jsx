@@ -10,7 +10,6 @@ import { MdOutlineNotificationsNone } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import { decodedToken } from "../helpers";
 import { Badge } from "@mui/material";
 
@@ -41,14 +40,18 @@ const Navbar = () => {
       </Link>
       <div className="flex items-center gap-2 pr-4">
         <Link>
-          <Badge badgeContent={4} color="primary">
-            <MdOutlineNotificationsNone
-              color="action"
-              size={23}
-              className="text-gray-600 hover:text-black transition-all "
-            />
-          </Badge>
+          <div className="relative inline-block">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-600 "></span>
+            <Badge badgeContent={4} color="primary">
+              <MdOutlineNotificationsNone
+                color="action"
+                size={25}
+                className="text-gray-600 hover:text-black transition-all"
+              />
+            </Badge>
+          </div>
         </Link>
+
         <Link>
           <Tooltip title="Mening hisobim">
             <IconButton
