@@ -77,9 +77,11 @@ export default function Reports() {
         <div className="flex gap-2">
           {letters.map((letter) => (
             <button
-              className={`p-2 rounded-lg  ${
-                selectedId === letter.id ? "bg-blue-400" : "bg-blue-200"
-              }`}
+              className={`text-white bg-gradient-to-r ${
+                selectedId === letter.id
+                  ? "from-green-500 via-green-500 to-green-700"
+                  : "from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br"
+              } font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2`}
               key={letter.id}
               onClick={() => {
                 setLetterName(letter.name);
@@ -90,6 +92,7 @@ export default function Reports() {
             </button>
           ))}
         </div>
+
         {loading ? (
           <AppLoader />
         ) : (
