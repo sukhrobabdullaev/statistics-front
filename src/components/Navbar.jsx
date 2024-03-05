@@ -35,23 +35,44 @@ const Navbar = () => {
 
   return (
     <div className="p-2 max-w-[1400px] mx-auto flex justify-between items-center">
-      <Link to={decodedToken.is_staff ? "/staff-dashboard" : "boss-dashboard"}>
-        <img src="/imgs/panel_hsat_logo.png" alt="hsat logo" className="w-28" />
-      </Link>
-      <div className="flex items-center gap-2 pr-4">
-        <Link>
-          <div className="relative inline-block">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-600 "></span>
-            <Badge badgeContent={4} color="primary">
-              <MdOutlineNotificationsNone
-                color="action"
-                size={25}
-                className="text-gray-600 hover:text-black transition-all"
-              />
-            </Badge>
-          </div>
+      {decodedToken && !decodedToken.is_superuser ? (
+        <Link
+          to={
+            decodedToken && decodedToken.is_staff
+              ? "/staff-dashboard"
+              : "/boss-dashboard"
+          }
+        >
+          <img
+            src="/imgs/panel_hsat_logo.png"
+            alt="hsat logo"
+            className="w-28"
+          />
         </Link>
-
+      ) : (
+        <Link to={decodedToken && decodedToken.is_superuser && "/superuser"}>
+          <img
+            src="/imgs/panel_hsat_logo.png"
+            alt="hsat logo"
+            className="w-28"
+          />
+        </Link>
+      )}
+      <div className="flex items-center gap-2 pr-4">
+        {decodedToken && !decodedToken.is_superuser && (
+          <Link>
+            <div className="relative inline-block">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-600 "></span>
+              <Badge badgeContent={4} color="primary">
+                <MdOutlineNotificationsNone
+                  color="action"
+                  size={25}
+                  className="text-gray-600 hover:text-black transition-all"
+                />
+              </Badge>
+            </div>
+          </Link>
+        )}
         <Link>
           <Tooltip title="Mening hisobim">
             <IconButton
@@ -104,7 +125,7 @@ const Navbar = () => {
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
             <MenuItem onClick={handleClose}>
-              <Avatar /> {decodedToken.username}
+              <Avatar /> {decodedToken && decodedToken.username}
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout}>

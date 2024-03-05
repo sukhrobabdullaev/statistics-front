@@ -4,6 +4,7 @@ import Main from "../pages/Main";
 import LoginForm from "../pages/LoginForm";
 import Revision from "../components/Hisobotlar/Revision";
 import InnUpload from "../components/Hisobotlar/InnUpload";
+import SuperUser from "../pages/SuperUser";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,14 @@ const router = createBrowserRouter([
     element: (
       <RootLayout>
         <Main />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/superuser",
+    element: (
+      <RootLayout>
+        <SuperUser />
       </RootLayout>
     ),
   },

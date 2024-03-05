@@ -39,13 +39,12 @@ const Main = () => {
 
     setSelectedItem(key);
   };
+  // Check if decodedToken is available before accessing its properties
+  const isBoss = decodedToken ? decodedToken.is_boss : false;
 
-  const iconMenu3 = !decodedToken.is_boss ? (
-    <UsergroupDeleteOutlined />
-  ) : (
-    <UploadOutlined />
-  );
-  const labelMenu3 = decodedToken.is_boss ? "Bo'limlar" : "Hisobotlar ro'yxati";
+  const iconMenu3 = !isBoss ? <UsergroupDeleteOutlined /> : <UploadOutlined />;
+  const labelMenu3 =
+    isBoss && !decodedToken.is_superuser ? "Bo'limlar" : "Hisobotlar ro'yxati";
 
   return (
     <Layout>

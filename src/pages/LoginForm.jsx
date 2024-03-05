@@ -27,14 +27,26 @@ const LoginForm = () => {
 
         const decodedToken = jwtDecode(access);
 
-        if (decodedToken.is_staff) {
-          navigate("/staff-dashboard", {
-            replace: true,
-          });
+        if (
+          decodedToken.is_staff &&
+          !decodedToken.is_boss &&
+          !decodedToken.is_superuser
+        ) {
+          navigate("/staff-dashboard");
           window.location.reload();
-        } else if (decodedToken.is_boss) {
-          navigate("/boss-dashboard", { replace: true });
+        } else if (
+          decodedToken.is_boss &&
+          !decodedToken.is_staff &&
+          !decodedToken.is_superuser
+        ) {
+          navigate("/boss-dashboard");
           window.location.reload();
+        } else if (
+          decodedToken.is_boss &&
+          decodedToken.is_staff &&
+          decodedToken.is_superuser
+        ) {
+          navigate("/superuser");
         } else {
           navigate("/");
         }
