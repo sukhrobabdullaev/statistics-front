@@ -1,88 +1,138 @@
-import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
-import { message, Upload } from "antd";
-import { useState } from "react";
-import { Button, DatePicker, Form, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
+import { BASE_URL, token } from "../helpers";
+import { Spin, message } from "antd";
+import { FileUploadOutlined } from "@mui/icons-material";
+import Box from "@mui/material/Box";
 
-const getBase64 = (file, callback) => {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(file);
-};
-
-const beforeUpload = (file) => {
-  const isExcel =
-    file.type === "application/vnd.ms-excel" ||
-    file.type ===
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-  if (!isExcel) {
-    message.error("Siz faqat excel fayl yulay olasiz!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 5;
-  if (!isLt2M) {
-    message.error("Excel 5MB dan ko'p bo'lmasin!");
-  }
-  return isExcel && isLt2M;
-};
-
-const SuperUser = () => {
+function SuperUser() {
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fileName, setFileName] = useState(""); // State to store the selected file name
+  const [fileUploaded, setFileUploaded] = useState(false);
+  const [rows, setRows] = useState([]);
 
-  const handleChange = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      // Get the image url from the response in real world.
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+    setFileName(selectedFile.name); // Update file name when a new file is selected
+  };
 
-      // Prepare form data
+  const handleUpload = async () => {
+    try {
+      if (!file) {
+        message.error("Fayl tanlanmagan!, Iltimos faylni tanlang!");
+        return;
+      }
+
+      setLoading(true); // Set loading state to true when starting the upload
+
       const formData = new FormData();
-      formData.append("excelFile", info.file.originFileObj);
+      formData.append("zarik_file", file);
 
-      // Make POST request
-      axios
-        .post("YOUR_API_ENDPOINT", formData)
-        .then((response) => {
-          // Handle success
-          console.log("File uploaded successfully:", response);
-        })
-        .catch((error) => {
-          // Handle error
-          console.error("Error uploading file:", error);
-        });
+      const response = await axios.post(
+        `${BASE_URL}/letter/zarik-create/`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      message.success(response?.data?.Successful);
+      setFileUploaded(true);
+    } catch (err) {
+      message.error(err.message);
+      message.info("Fayl nomi 'zarik_file' nomi bilan bolishi kerak.");
+    } finally {
+      setLoading(false); // Set loading state to false when upload is completed or failed
     }
   };
 
-  return (
-    <div className="max-w-[1200px] text-center h-full mx-auto mt-5 flex flex-col gap-6">
-      <h1 className="text-3xl font-semibold font-mono">Zarik Baza yuklash</h1>
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/mainletter/typeletter/zarik-get/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      <Upload
-        name="zarik_file"
-        listType="picture-circle"
-        showUploadList={false}
-        maxCount={1}
-        multiple={false}
-        beforeUpload={beforeUpload}
-        onChange={handleChange}
-        accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        // console.log(response?.data);
+        console.log(response?.data?.results);
+        setRows(response?.data?.results);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 90 },
+    {
+      field: "company_name",
+      headerName: "Kompaniya nomi",
+      width: 700,
+      editable: true,
+    },
+  ];
+
+  // const rows = [{ id: 1, company_name: "nimadir" }];
+
+  const handleClickRow = (params) => {
+    const id = params.row.id;
+    navigate(`/revison/${id}`);
+  };
+
+  return (
+    <div className="text-center flex flex-col items-center justify-center gap-6">
+      <label
+        htmlFor="fileInput"
+        className="custom-file-upload bg-gray-300 px-4 py-2 cursor-pointer flex items-center gap-2 justify-center w-32 h-32 hover:bg-gray-200 border-dashed border-2 border-blue-400 mx-auto rounded-full flex-col"
       >
-        <button
-          style={{
-            border: 0,
-            background: "none",
-          }}
-          type="button"
-        >
-          yuklash
-        </button>
-      </Upload>
+        <FileUploadOutlined />
+        <span>{fileName || "Faylni tanlang"}</span>
+        <input
+          id="fileInput"
+          type="file"
+          name="zarik_file"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+      </label>
+      <button
+        onClick={handleUpload}
+        disabled={loading || fileUploaded}
+        className={`text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2${
+          fileUploaded && "bg-blue-300 hover:bg-blue-300"
+        }`}
+      >
+        {loading ? (
+          <span>
+            <Spin />
+          </span>
+        ) : (
+          "Yuborish"
+        )}
+      </button>
+
+      <Box sx={{ height: 700, width: "80%", marginBottom: 30 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          disableColumnMenu
+          pageSizeOptions={[50]}
+          onRowClick={handleClickRow}
+        />
+      </Box>
     </div>
   );
-};
+}
 
 export default SuperUser;

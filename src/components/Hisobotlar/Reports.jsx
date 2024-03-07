@@ -99,8 +99,8 @@ export default function Reports() {
           <div style={{ height: "100%", width: "70%" }}>
             <DataGrid
               // disableColumnMenu
-              rows={rows}
               columns={columns}
+              rows={rows}
               // initialState={{
               //   pagination: {
               //     paginationModel: { pageSize: 5 },
