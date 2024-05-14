@@ -6,22 +6,24 @@ import { BASE_URL } from "../../helpers";
 import axios from "axios";
 import AppLoader from "../AppLoader";
 import AlertDialogSlide from "./Modal";
+import { message } from "antd";
 
 const API_KEY = "p2mdh6c2rib3n2knlak74u4778yb0659xt2hvdjkso2sizio";
 
 export const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="down" ref={ref} {...props} />;
 });
 
 const Revision = () => {
   const [template, setTemplate] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [bodyContent, setBodyContent] = useState(template.body);
   const [open, setOpen] = useState(false);
 
   const params = useParams();
   const navigate = useNavigate();
-  let token = localStorage.getItem("access_token");
 
+  let token = localStorage.getItem("access_token");
   const templateId = localStorage.getItem("template_id");
 
   const handleClickOpen = () => {
@@ -32,10 +34,6 @@ const Revision = () => {
     setOpen(false);
   };
 
-  const handleSave = () => {
-    navigate("inn_upload");
-    setOpen(false);
-  };
   useEffect(() => {
     setLoading(true);
     async function getData() {
@@ -60,6 +58,39 @@ const Revision = () => {
     getData();
   }, []);
 
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.put(
+        `${BASE_URL}/mainletter/typeletter/${templateId}/${params?.id}/`,
+        {
+          id: template.id,
+          title: template.title,
+          body: bodyContent,
+          report_date: template.report_date,
+          create_date: template.create_date,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Handle response as needed, maybe show a success message
+      console.log(res);
+      // Redirect or handle success as needed
+      navigate("inn_upload");
+      message.success("Muvaffiqaytli saqlandi.");
+    } catch (err) {
+      message.error("Xatolik yuz berdi!");
+      handleClose();
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -78,6 +109,10 @@ const Revision = () => {
                 "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
             }}
             initialValue={template.body}
+            value={bodyContent}
+            onEditorChange={(content, editor) => {
+              setBodyContent(content);
+            }}
           />
 
           <button

@@ -13,6 +13,8 @@ import Content2 from "../components/Contents/Content2";
 import Content3 from "../components/Contents/Content3";
 import { decodedToken } from "../helpers";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Add } from "@mui/icons-material";
+import Content4 from "../components/Contents/Content4";
 
 const { Header, Sider, Content } = Layout;
 
@@ -46,6 +48,9 @@ const Main = () => {
   const labelMenu3 =
     isBoss && !decodedToken.is_superuser ? "Bo'limlar" : "Hisobotlar ro'yxati";
 
+  const iconMenu4 = !isBoss && <Add />;
+  const labelMenu4 = !isBoss && "Hisobot yaratish";
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={!collapsed} className="pt-3">
@@ -71,7 +76,12 @@ const Main = () => {
               icon: iconMenu3,
               label: labelMenu3,
             },
-          ]}
+            !isBoss && {
+              key: "4",
+              icon: iconMenu4,
+              label: labelMenu4,
+            },
+          ].filter(Boolean)}
         />
       </Sider>
       <Layout>
@@ -103,6 +113,7 @@ const Main = () => {
           {selectedItem === "1" && <Content1 />}
           {selectedItem === "2" && <Content2 />}
           {selectedItem === "3" && <Content3 />}
+          {selectedItem === "4" && <Content4 />}
         </Content>
       </Layout>
     </Layout>

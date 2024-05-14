@@ -96,7 +96,11 @@ const LoginForm = () => {
                 },
               ]}
             >
-              <Input placeholder="Username" className="p-2 w-[250px]" />
+              <Input
+                placeholder="Username"
+                className="p-2 w-[250px]"
+                autoComplete="username"
+              />
             </Form.Item>
 
             <Form.Item
@@ -108,7 +112,11 @@ const LoginForm = () => {
                 },
               ]}
             >
-              <Input.Password placeholder="Password" className="p-2" />
+              <Input.Password
+                placeholder="Password"
+                className="p-2"
+                autoComplete="current-password"
+              />
             </Form.Item>
 
             <Form.Item>

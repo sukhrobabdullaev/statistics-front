@@ -68,9 +68,14 @@ export default function Reports() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "title", headerName: letterName, width: 200 },
+    {
+      field: "title",
+      headerName: letterName ? letterName : "Ko'rsatma xati",
+      width: 200,
+    },
   ];
 
+  console.log();
   return (
     <>
       <div className="flex flex-col gap-5">
@@ -98,16 +103,21 @@ export default function Reports() {
         ) : (
           <div style={{ height: "100%", width: "70%" }}>
             <DataGrid
-              // disableColumnMenu
+              disableColumnMenu
               columns={columns}
               rows={rows}
-              // initialState={{
-              //   pagination: {
-              //     paginationModel: { pageSize: 5 },
-              //   },
-              // }}
-              pageSizeOptions={[5]}
+              initialState={{
+                pagination: {
+                  pageSize: 10,
+                },
+              }}
               onRowClick={handleClickRow}
+              pageSizeOptions={[10, 100]}
+              pagination
+              disableColumnResize
+              disableColumnFilter
+              // disableColumnMenu
+              disableColumnSelector
             />
           </div>
         )}
