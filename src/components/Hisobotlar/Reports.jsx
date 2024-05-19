@@ -34,19 +34,16 @@ export default function Reports() {
     async function getData() {
       setLoading(true);
       try {
-        const idsResponse = await axios.get(
-          `${BASE_URL}/mainletter/typeletter/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const idsResponse = await axios.get(`${BASE_URL}/v3/typeletter/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const ids = idsResponse?.data?.results;
         setLetters(ids);
 
         const res = await axios.get(
-          `${BASE_URL}/mainletter/typeletter/${
+          `${BASE_URL}/v3/typeletter/${
             searchParams.get("template_id") || "1"
           }/`,
           {
@@ -75,7 +72,6 @@ export default function Reports() {
     },
   ];
 
-  console.log();
   return (
     <>
       <div className="flex flex-col gap-5">

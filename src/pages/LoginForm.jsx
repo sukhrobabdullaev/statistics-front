@@ -13,7 +13,7 @@ const LoginForm = () => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${BASE_URL}/account/login/`, {
+      const response = await axios.post(`${BASE_URL}/v1/login/`, {
         username: values.username,
         password: values.password,
       });

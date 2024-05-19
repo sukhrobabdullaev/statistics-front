@@ -3,12 +3,15 @@ import axios from "axios";
 import { BASE_URL, token } from "../../helpers";
 import AppLoader from "../AppLoader";
 import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const Content4 = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [options, setOptions] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getData() {
@@ -22,10 +25,7 @@ const Content4 = () => {
           },
         };
 
-        const res = await fetch(
-          `${BASE_URL}/mainletter/typeletter/`,
-          requestOptions
-        );
+        const res = await fetch(`${BASE_URL}/v3/typeletter/`, requestOptions);
 
         if (!res.ok) {
           throw new Error("Network response was not ok");
@@ -52,7 +52,7 @@ const Content4 = () => {
       const formData = new FormData(e.target);
 
       const response = await axios.post(
-        `${BASE_URL}/mainletter/template-create/`,
+        `${BASE_URL}/v3/template-create/`,
         formData,
         {
           headers: {
@@ -66,7 +66,10 @@ const Content4 = () => {
       if (!response.ok) {
         message.error("Xatolik yuz berdi!");
       }
-      message.success("Muvaffaqiyatli yuborildi!");
+      e.target.reset();
+      message.success("Muvaffaqiyatli yaratildi!");
+      navigate(`?step_id=3`);
+      window.location.reload();
     } catch (error) {
       console.error("Error:", error);
       setError(error);
@@ -140,21 +143,6 @@ const Content4 = () => {
             placeholder="template"
             required
           ></textarea>
-        </div>
-        <div className="space-y-2">
-          <label
-            htmlFor="report_date"
-            className="block text-base font-medium text-gray-700"
-          >
-            Sana
-          </label>
-          <input
-            type="date"
-            id="report_date"
-            name="report_date"
-            className="appearance-none border border-gray-400 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-            required
-          />
         </div>
         <button
           type="submit"

@@ -24,7 +24,7 @@ const Revision = () => {
   const navigate = useNavigate();
 
   let token = localStorage.getItem("access_token");
-  const templateId = localStorage.getItem("template_id");
+  const templateId = localStorage.getItem("template_id") ?? "1";
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,7 +39,7 @@ const Revision = () => {
     async function getData() {
       try {
         const res = await axios.get(
-          `${BASE_URL}/mainletter/typeletter/${templateId}/${params?.id}/`,
+          `${BASE_URL}/v3/typeletter/${templateId}/${params?.id}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ const Revision = () => {
     try {
       setLoading(true);
       const res = await axios.put(
-        `${BASE_URL}/mainletter/typeletter/${templateId}/${params?.id}/`,
+        `${BASE_URL}/v3/typeletter/${templateId}/${params?.id}/`,
         {
           id: template.id,
           title: template.title,
@@ -78,7 +78,6 @@ const Revision = () => {
       );
 
       // Handle response as needed, maybe show a success message
-      console.log(res);
       // Redirect or handle success as needed
       navigate("inn_upload");
       message.success("Muvaffiqaytli saqlandi.");

@@ -32,7 +32,7 @@ function SuperUser() {
       formData.append("zarik_file", file);
 
       const response = await axios.post(
-        `${BASE_URL}/letter/zarik-create/`,
+        `${BASE_URL}/v2/zarik-create/`,
         formData,
         {
           headers: {
@@ -54,7 +54,7 @@ function SuperUser() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          `${BASE_URL}/mainletter/typeletter/zarik-get/`,
+          `${BASE_URL}/v3/typeletter/zarik-get/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
