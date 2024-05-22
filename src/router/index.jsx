@@ -5,6 +5,8 @@ import LoginForm from "../pages/LoginForm";
 import Revision from "../components/Hisobotlar/Revision";
 import InnUpload from "../components/Hisobotlar/InnUpload";
 import SuperUser from "../pages/SuperUser";
+import BossReview from "../components/Boss/BossReview";
+import TemplateDetails from "../components/Boss/TemplateDetails";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,22 @@ const router = createBrowserRouter([
     element: (
       <RootLayout>
         <InnUpload />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/boss-review/:id",
+    element: (
+      <RootLayout>
+        <BossReview />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/boss-review/:id/template-details",
+    element: (
+      <RootLayout>
+        <TemplateDetails />
       </RootLayout>
     ),
   },

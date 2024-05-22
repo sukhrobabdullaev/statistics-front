@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import AppLoader from "../AppLoader";
 
-export default function Reports() {
+export default function BossReports() {
   const [letters, setLetters] = useState([]);
   const [rows, setRows] = useState([]);
   const [letterName, setLetterName] = useState(null);
@@ -16,9 +16,30 @@ export default function Reports() {
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const handleClickRow = (params) => {
-    const id = params.row.id;
-    navigate(`/revison/${id}`);
+  let token = localStorage.getItem("access_token");
+
+  let typeletter_id = localStorage.getItem("template_id");
+
+  const handleClickRow = async (params) => {
+    const staff_id = params.row.id;
+
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/v4/typeletter/partyuser/partyuser-typeletter-id/`,
+        {
+          typeletter_id,
+          staff_id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      navigate(`/boss-review/${staff_id}`, { state: { data: res.data } });
+    } catch (error) {
+      console.error("Error posting row data", error);
+    }
   };
 
   const selectId = (id) => {
@@ -28,13 +49,11 @@ export default function Reports() {
     navigate(newUrl);
   };
 
-  let token = localStorage.getItem("access_token");
-
   useEffect(() => {
     async function getData() {
       setLoading(true);
       try {
-        const idsResponse = await axios.get(`${BASE_URL}/v3/typeletter/`, {
+        const idsResponse = await axios.get(`${BASE_URL}/v4/typeletter/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,17 +61,12 @@ export default function Reports() {
         const ids = idsResponse?.data?.results;
         setLetters(ids);
 
-        const res = await axios.get(
-          `${BASE_URL}/v3/typeletter/${
-            searchParams.get("template_id") || "1"
-          }/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setRows(res.data);
+        const res = await axios.get(`${BASE_URL}/v4/typeletter/partyuser/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRows(res?.data?.results);
       } catch (error) {
         setLoading(false);
       } finally {
@@ -66,7 +80,7 @@ export default function Reports() {
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     {
-      field: "title",
+      field: "party_name",
       headerName: letterName ? letterName : "Ko'rsatma xati",
       width: 200,
     },
