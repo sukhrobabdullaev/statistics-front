@@ -34,7 +34,7 @@ export default function Reports() {
     async function getData() {
       setLoading(true);
       try {
-        const idsResponse = await axios.get(`${BASE_URL}/v3/typeletter/`, {
+        const idsResponse = await axios.get(`${BASE_URL}/v4/typeletter/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,17 +42,12 @@ export default function Reports() {
         const ids = idsResponse?.data?.results;
         setLetters(ids);
 
-        const res = await axios.get(
-          `${BASE_URL}/v3/typeletter/${
-            searchParams.get("template_id") || "1"
-          }/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setRows(res.data);
+        const res = await axios.get(`${BASE_URL}/v4/typeletter/partyuser/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setRows(res?.data?.results);
       } catch (error) {
         setLoading(false);
       } finally {
@@ -66,7 +61,7 @@ export default function Reports() {
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     {
-      field: "title",
+      field: "party_name",
       headerName: letterName ? letterName : "Ko'rsatma xati",
       width: 200,
     },
