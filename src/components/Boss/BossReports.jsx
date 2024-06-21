@@ -17,7 +17,6 @@ export default function BossReports() {
   const navigate = useNavigate();
 
   let token = localStorage.getItem("access_token");
-
   let typeletter_id = localStorage.getItem("template_id");
 
   const handleClickRow = async (params) => {
@@ -36,6 +35,7 @@ export default function BossReports() {
           },
         }
       );
+      console.log("boss reports:", res);
       navigate(`/boss-review/${staff_id}`, { state: { data: res.data } });
     } catch (error) {
       console.error("Error posting row data", error);

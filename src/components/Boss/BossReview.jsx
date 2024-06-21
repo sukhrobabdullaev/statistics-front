@@ -10,7 +10,6 @@ const BossReview = () => {
   const { data } = location.state || {};
   const navigate = useNavigate();
   let params = useParams();
-  const staff_id = params.id;
 
   //   let typeletter_id = localStorage.getItem("template_id");
 
@@ -20,12 +19,12 @@ const BossReview = () => {
       console.log("success");
     }
   }, [data]);
-
+  console.log(rows);
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     {
       field: "title",
-      headerName: "Kompaniya",
+      headerName: "Hisobot nomi",
       width: 400,
     },
   ];
@@ -37,7 +36,7 @@ const BossReview = () => {
         {
           typeletter_id: params.row.typeletter,
           staff_id: params.row.user_staff,
-          id: staff_id,
+          id: params.row.id,
         },
         {
           headers: {
@@ -46,8 +45,9 @@ const BossReview = () => {
         }
       );
       console.log(res);
-
-      navigate(`/boss-review/${params.row.user_staff}/template-details`);
+      navigate(`/boss-review/${params.row.user_staff}/template-details`, {
+        state: { data: res.data },
+      });
     } catch (error) {
       console.error("Error posting row data", error);
     }
