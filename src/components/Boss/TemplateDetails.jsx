@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,20 +10,22 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { BASE_URL, token } from "../../helpers";
 import axios from "axios";
+import { useData } from "../../context/DataContext";
+import { message } from "antd";
 
 const TemplateDetails = () => {
-  const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
+  const { templateDetails } = useData();
   const [selectedRowId, setSelectedRowId] = useState(null);
-  const location = useLocation();
-  const { data } = location.state || {};
+  const [rows, setRows] = useState([]);
+  const [isSigned, setIsSigned] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setRows(data);
-      console.log("TEMPLATE DETAILS:", data);
+    if (templateDetails) {
+      setRows(templateDetails);
+      console.log("TEMPLATE DETAILS:", templateDetails);
     }
-  }, [data]);
+  }, [templateDetails]);
 
   const handleOpen = (id) => {
     console.log(id);
@@ -39,28 +40,50 @@ const TemplateDetails = () => {
 
   const handleDelete = async () => {
     try {
-      const res = await axios.delete(
-        `${BASE_URL}/v4/partyuser/typeletter/delete/${selectedRowId}/`,
+      const res = await axios.post(
+        `${BASE_URL}/v4/partyuser/typeletter/delete/`,
+        { id: selectedRowId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      if (res.status === 200 || res.status === 204) {
-        setRows((prevRows) =>
-          prevRows.filter((row) => row.id !== selectedRowId)
-        );
-      } else {
-        console.error("Unexpected response status:", res.status);
+      const updatedRows = rows.filter((row) => row.id !== selectedRowId);
+      setRows(updatedRows);
+      const success = res?.data?.status;
+      message.success(`${success && "Muvaffaqiyatli o'chirildi!"}`);
+      if (isSigned) {
+        setRows(null);
       }
     } catch (error) {
-      console.error(
-        "Failed to delete the row:",
-        error.response || error.message || error
-      );
+      console.error("Failed to delete the row:", error);
     } finally {
       handleClose();
+    }
+  };
+  const handleSigned = async () => {
+    try {
+      const pdf_file_updates = rows.map((row) => ({
+        id: row.id,
+        user_staff: row.user_staff,
+      }));
+
+      const res = await axios.put(
+        `${BASE_URL}/v4/partyuser/typeletter/update/`,
+        { pdf_file_updates },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const success = res?.data?.status;
+      message.success(`${success && "Imzolandi!"}`);
+      setIsSigned(true);
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to update the DATA:", error);
     }
   };
 
@@ -86,20 +109,32 @@ const TemplateDetails = () => {
   return (
     <div className="max-w-[1200px] h-full mx-auto mt-5 flex flex-col gap-6">
       <h1 className="text-3xl font-semibold">Hisobotlar ro'yxati</h1>
-      <DataGrid
-        disableColumnMenu
-        columns={columns}
-        rows={rows}
-        initialState={{
-          pagination: {
-            pageSize: 10,
-          },
+      <div style={{ height: 350, width: "100%" }}>
+        <DataGrid
+          disableColumnMenu
+          columns={columns}
+          rows={rows}
+          initialState={{
+            pagination: {
+              pageSize: 10,
+            },
+          }}
+          pageSizeOptions={[10, 100]}
+          pagination
+          disableColumnResize
+          disableColumnFilter
+        />
+      </div>
+      <Button
+        onClick={handleSigned}
+        disabled={isSigned}
+        style={{
+          backgroundColor: "blue",
+          color: "white",
         }}
-        pageSizeOptions={[10, 100]}
-        pagination
-        disableColumnResize
-        disableColumnFilter
-      />
+      >
+        Imzolash
+      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{"Xat chiqarmaslik!"}</DialogTitle>
         <DialogContent>
