@@ -5,9 +5,11 @@ import { BASE_URL } from "../../helpers";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import AppLoader from "../AppLoader";
+import { useData } from "../../context/DataContext";
 
 export default function BossReports() {
   const [letters, setLetters] = useState([]);
+  const { setData } = useData();
   const [rows, setRows] = useState([]);
   const [letterName, setLetterName] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -35,8 +37,8 @@ export default function BossReports() {
           },
         }
       );
-      console.log("boss reports:", res);
-      navigate(`/boss-review/${staff_id}`, { state: { data: res.data } });
+      setData(res.data);
+      navigate(`/boss-review/${staff_id}`);
     } catch (error) {
       console.error("Error posting row data", error);
     }

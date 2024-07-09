@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { BASE_URL, token } from "../../helpers";
 import axios from "axios";
+import { useData } from "../../context/DataContext";
 
 const BossReview = () => {
+  const { data } = useData();
+  const { setTemplateDetails } = useData();
   const [rows, setRows] = useState([]);
-  const location = useLocation();
-  const { data } = location.state || {};
-  const navigate = useNavigate();
-  let params = useParams();
 
-  //   let typeletter_id = localStorage.getItem("template_id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
       setRows(data);
-      console.log("success");
     }
   }, [data]);
-  console.log(rows);
+
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     {
@@ -44,10 +42,8 @@ const BossReview = () => {
           },
         }
       );
-      console.log(res);
-      navigate(`/boss-review/${params.row.user_staff}/template-details`, {
-        state: { data: res.data },
-      });
+      setTemplateDetails(res.data);
+      navigate(`/boss-review/${params.row.user_staff}/template-details`);
     } catch (error) {
       console.error("Error posting row data", error);
     }
