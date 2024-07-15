@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { BASE_URL, token } from "../../helpers/index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalConf from "../ModalConf";
 import { message, Upload, Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import AppLoader from "../AppLoader";
+import axios from "axios";
 
 const InnUpload = () => {
   const [uploadedData, setUploadedData] = useState(null);
@@ -14,6 +15,29 @@ const InnUpload = () => {
   const [fileList, setFileList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false); // New state variable
+  const [error, setError] = useState(null);
+  const [boss, setBoss] = useState([]);
+  const [selectedBoss, setSelectedBoss] = useState(null); // New state variable
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); // Set loading to true before starting the request
+      try {
+        const response = await axios.get(`${BASE_URL}/v2/all-boss/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }); // Replace with your API endpoint
+        setBoss(response?.data?.results);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false); // Set loading to false after the request is completed
+      }
+    };
+
+    fetchData();
+  }, []); // Empty dependency array means this effect runs once after the initial render
 
   const params = useParams();
   let template_id = localStorage.getItem("template_id");
@@ -59,6 +83,7 @@ const InnUpload = () => {
     const formData = new FormData();
     formData.append("typeletter_id", template_id);
     formData.append("id", params.id);
+    formData.append("user_boss", selectedBoss); // Include selected boss
 
     if (fileList.length > 0) {
       formData.append("excel_file", fileList[0].originFileObj);
@@ -96,7 +121,6 @@ const InnUpload = () => {
     return isExcel || Upload.LIST_IGNORE;
   };
 
-  console.log(uploadedData && uploadedData);
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     {
@@ -110,6 +134,9 @@ const InnUpload = () => {
       width: 400,
     },
   ];
+
+  if (loading) return <AppLoader />;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="md:max-w-[1200px] h-full mx-auto mt-5">
@@ -140,13 +167,28 @@ const InnUpload = () => {
           dagi kabi bo'lishi kerak.
         </div>
       </div>
-      <form>
+      <form className="flex flex-col items-center justify-center">
+        <select
+          name="user_boss"
+          id="user_boss"
+          className="p-2 border-2 mb-4 "
+          onChange={(e) => setSelectedBoss(e.target.value)}
+        >
+          {boss &&
+            boss.map((el) => (
+              <option value={el.id} key={el.id}>
+                {el.first_name} {el.last_name}
+              </option>
+            ))}
+        </select>
+
         <Upload
           fileList={fileList}
           onChange={handleChange}
           beforeUpload={beforeUpload}
           accept=".xlsx,.xls"
           multiple={false}
+          className=""
         >
           <Button icon={<UploadOutlined />}>Excel Faylni yuklash</Button>
         </Upload>

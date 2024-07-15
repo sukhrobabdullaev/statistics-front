@@ -41,7 +41,7 @@ const TemplateDetails = () => {
   const handleDelete = async () => {
     try {
       const res = await axios.post(
-        `${BASE_URL}/v4/partyuser/typeletter/delete/`,
+        `${BASE_URL}/v4/typeletter/partyuser/delete/`,
         { id: selectedRowId },
         {
           headers: {
@@ -49,6 +49,7 @@ const TemplateDetails = () => {
           },
         }
       );
+      console.log(res);
       const updatedRows = rows.filter((row) => row.id !== selectedRowId);
       setRows(updatedRows);
       const success = res?.data?.status;
@@ -70,7 +71,7 @@ const TemplateDetails = () => {
       }));
 
       const res = await axios.put(
-        `${BASE_URL}/v4/partyuser/typeletter/update/`,
+        `${BASE_URL}/v4/typeletter/partyuser/update/`,
         { pdf_file_updates },
         {
           headers: {
@@ -81,7 +82,7 @@ const TemplateDetails = () => {
       const success = res?.data?.status;
       message.success(`${success && "Imzolandi!"}`);
       setIsSigned(true);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Failed to update the DATA:", error);
     }

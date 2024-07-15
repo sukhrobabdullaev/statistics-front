@@ -5,10 +5,18 @@ const DataContext = createContext();
 export const DataProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [templateDetails, setTemplateDetails] = useState([]);
+  const [letterDates, setLetterDates] = useState([]);
 
   return (
     <DataContext.Provider
-      value={{ data, setData, templateDetails, setTemplateDetails }}
+      value={{
+        data,
+        setData,
+        templateDetails,
+        setTemplateDetails,
+        letterDates,
+        setLetterDates,
+      }}
     >
       {children}
     </DataContext.Provider>

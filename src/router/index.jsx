@@ -7,6 +7,7 @@ import InnUpload from "../components/Hisobotlar/InnUpload";
 import SuperUser from "../pages/SuperUser";
 import BossReview from "../components/Boss/BossReview";
 import TemplateDetails from "../components/Boss/TemplateDetails";
+import Signed from "../components/Hisobotlar/Signed";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
     element: (
       <RootLayout>
         <Revision />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/signed-letters/:id",
+    element: (
+      <RootLayout>
+        <Signed />
       </RootLayout>
     ),
   },
