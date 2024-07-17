@@ -147,41 +147,45 @@ const Signed = () => {
                     renderItem={(item) => (
                       <List.Item key={item.id}>
                         <Card title={item.company_name}>
-                          <p className="font-semibold">
-                            Xat turi:
-                            <span className="font-normal">
-                              {item.typeletter}
-                            </span>
-                          </p>
-                          <p className="font-semibold">
-                            Pay:
-                            <span className="font-normal"> {item.pay}</span>
-                          </p>
-                          <p className="font-semibold">
-                            Sana:
-                            <span className="font-normal">
-                              {item.letter_date}
-                            </span>
-                          </p>
+                          <div className="mb-6">
+                            <p className="font-semibold">
+                              Xat turi:
+                              <span className="font-normal">
+                                {item.typeletter}
+                              </span>
+                            </p>
+                            <p className="font-semibold">
+                              Pay:
+                              <span className="font-normal"> {item.pay}</span>
+                            </p>
+                            <p className="font-semibold">
+                              Sana:
+                              <span className="font-normal">
+                                {item.letter_date}
+                              </span>
+                            </p>
+                          </div>
 
-                          <img
-                            src={`http://45.55.194.72:8003${item.qr_code}`}
+                          {/* <img
+                            src={`https://hsat.uz${item.qr_code}`}
                             alt="QR Code"
                             style={{ marginTop: 10 }}
-                          />
-                          <a
-                            href={mergedPdf}
-                            download={`${item.company_name}-${isTemplate(
-                              typeletter_id
-                            )}`}
-                          >
-                            <Button onClick={() => setSelectedItem(item)}>
-                              VIEW
-                            </Button>
+                          /> */}
+                          <div className="flex gap-4">
+                            <a
+                              href={mergedPdf}
+                              download={`${item.company_name}-${isTemplate(
+                                typeletter_id
+                              )}`}
+                            >
+                              <Button onClick={() => setSelectedItem(item)}>
+                                Dowload
+                              </Button>
+                            </a>
                             <Button onClick={() => handleSigned(item.id)}>
                               IN DETAIL
                             </Button>
-                          </a>
+                          </div>
                         </Card>
                       </List.Item>
                     )}
@@ -199,8 +203,8 @@ const Signed = () => {
               )}
               {selectedItem && (
                 <FileMerger
-                  pdfUrl={`http://45.55.194.72:8003${selectedItem.pdf_file}`}
-                  qrCodeUrl={`http://45.55.194.72:8003${selectedItem.qr_code}`}
+                  pdfUrl={`https://hsat.uz${selectedItem.pdf_file}`}
+                  qrCodeUrl={`https://hsat.uz${selectedItem.qr_code}`}
                   mergedPdf={mergedPdf}
                   setMergedPdf={setMergedPdf}
                 />

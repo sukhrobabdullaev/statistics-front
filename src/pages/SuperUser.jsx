@@ -37,6 +37,7 @@ function SuperUser() {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -62,7 +63,6 @@ function SuperUser() {
           }
         );
 
-        // console.log(response?.data);
         console.log(response?.data?.results);
         setRows(response?.data?.results);
       } catch (err) {
@@ -82,8 +82,6 @@ function SuperUser() {
       editable: true,
     },
   ];
-
-  // const rows = [{ id: 1, company_name: "nimadir" }];
 
   const handleClickRow = (params) => {
     const id = params.row.id;

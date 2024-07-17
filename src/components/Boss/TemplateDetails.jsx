@@ -12,6 +12,7 @@ import { BASE_URL, token } from "../../helpers";
 import axios from "axios";
 import { useData } from "../../context/DataContext";
 import { message } from "antd";
+import AppLoader from "../AppLoader";
 
 const TemplateDetails = () => {
   const [open, setOpen] = useState(false);
@@ -19,6 +20,7 @@ const TemplateDetails = () => {
   const [selectedRowId, setSelectedRowId] = useState(null);
   const [rows, setRows] = useState([]);
   const [isSigned, setIsSigned] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (templateDetails) {
@@ -49,7 +51,7 @@ const TemplateDetails = () => {
           },
         }
       );
-      console.log(res);
+
       const updatedRows = rows.filter((row) => row.id !== selectedRowId);
       setRows(updatedRows);
       const success = res?.data?.status;
@@ -64,6 +66,7 @@ const TemplateDetails = () => {
     }
   };
   const handleSigned = async () => {
+    setLoading(true);
     try {
       const pdf_file_updates = rows.map((row) => ({
         id: row.id,
@@ -79,12 +82,15 @@ const TemplateDetails = () => {
           },
         }
       );
-      const success = res?.data?.status;
-      message.success(`${success && "Imzolandi!"}`);
-      setIsSigned(true);
-      // window.location.reload();
+      if (res.status === 200) {
+        setLoading(false);
+        const success = res?.data?.status;
+        message.success(`${success && "Muvaffaqiyatli Imzolandi!"}`);
+        setIsSigned(true);
+      }
     } catch (error) {
       console.error("Failed to update the DATA:", error);
+      setLoading(false);
     }
   };
 
@@ -108,51 +114,57 @@ const TemplateDetails = () => {
   ];
 
   return (
-    <div className="max-w-[1200px] h-full mx-auto mt-5 flex flex-col gap-6">
-      <h1 className="text-3xl font-semibold">Hisobotlar ro'yxati</h1>
-      <div style={{ height: 350, width: "100%" }}>
-        <DataGrid
-          disableColumnMenu
-          columns={columns}
-          rows={rows}
-          initialState={{
-            pagination: {
-              pageSize: 10,
-            },
-          }}
-          pageSizeOptions={[10, 100]}
-          pagination
-          disableColumnResize
-          disableColumnFilter
-        />
-      </div>
-      <Button
-        onClick={handleSigned}
-        disabled={isSigned}
-        style={{
-          backgroundColor: "blue",
-          color: "white",
-        }}
-      >
-        Imzolash
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{"Xat chiqarmaslik!"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this row?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Bekor qilish
+    <>
+      {loading ? (
+        <AppLoader />
+      ) : (
+        <div className="max-w-[1200px] h-full mx-auto mt-5 flex flex-col gap-6">
+          <h1 className="text-3xl font-semibold">Hisobotlar ro'yxati</h1>
+          <div style={{ height: 350, width: "100%" }}>
+            <DataGrid
+              disableColumnMenu
+              columns={columns}
+              rows={rows}
+              initialState={{
+                pagination: {
+                  pageSize: 10,
+                },
+              }}
+              pageSizeOptions={[10, 100]}
+              pagination
+              disableColumnResize
+              disableColumnFilter
+            />
+          </div>
+          <Button
+            onClick={handleSigned}
+            disabled={isSigned}
+            style={{
+              backgroundColor: "blue",
+              color: "white",
+            }}
+          >
+            Imzolash
           </Button>
-          <Button onClick={handleDelete} color="secondary">
-            O'chirish
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>{"Xat chiqarmaslik!"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Are you sure you want to delete this row?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Bekor qilish
+              </Button>
+              <Button onClick={handleDelete} color="secondary">
+                O'chirish
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      )}
+    </>
   );
 };
 

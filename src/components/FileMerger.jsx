@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { PDFDocument } from "pdf-lib";
-import { typeletter_id } from "../helpers";
+
 import { message } from "antd";
 
 const FileMerger = ({ pdfUrl, qrCodeUrl, setMergedPdf }) => {
-  // const [, ] = useState(null);
-  // const [mergedPdfName, setMergedPdfName] = useState(`${company_name}.pdf`);
-
   useEffect(() => {
     const mergeFiles = async () => {
       try {

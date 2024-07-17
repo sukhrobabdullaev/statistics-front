@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Spin, Form, Select, Input, Button, Typography, Row, Col } from "antd";
+import {
+  Spin,
+  Form,
+  Select,
+  Input,
+  Button,
+  Typography,
+  Row,
+  Col,
+  message,
+} from "antd";
 import { BASE_URL, token } from "../../helpers";
 import AppLoader from "../AppLoader";
 
@@ -50,7 +60,9 @@ const SignedXat = () => {
         }
       );
 
-      console.log("Response:", res);
+      if (res.status === 200) {
+        message.success("Muvaffaqiyatli Saqlandi!");
+      }
     } catch (error) {
       console.error("Error sending data:", error);
     } finally {
@@ -66,14 +78,14 @@ const SignedXat = () => {
     <Row
       justify="center"
       align="middle"
-      style={{ minHeight: "100vh" }}
+      style={{ minHeight: "80vh" }}
       initialValues={{
         pay: signed ? signed.pay : undefined,
         comment: "",
       }}
     >
-      <Col span={12}>
-        <div style={{ textAlign: "center" }}>
+      <Col span={8}>
+        <div>
           {signed && (
             <div>
               <Title level={4}>KOMPANIYA: {signed.company_name}</Title>
@@ -102,7 +114,7 @@ const SignedXat = () => {
                 },
               ]}
             >
-              <Select>
+              <Select placeholder="PAY yoki NO PAY">
                 <Select.Option value="Bartaraf etildi">
                   Bartaraf etildi
                 </Select.Option>
@@ -118,7 +130,10 @@ const SignedXat = () => {
                 { required: true, message: "Iltimos fikringizni qoldiring!" },
               ]}
             >
-              <Input.TextArea rows={4} />
+              <Input.TextArea
+                rows={4}
+                placeholder="Fikringizni shu yerga yozing!"
+              />
             </Form.Item>
 
             <Form.Item>
