@@ -47,7 +47,7 @@ export default function Content5() {
   const selectId = (id) => {
     localStorage.setItem("template_id", id);
     setSelectedId(id);
-    const newUrl = `${window.location.pathname}?step_id=3&template_id=${id}`;
+    const newUrl = `${window.location.pathname}?step_id=5&template_id=${id}`;
     navigate(newUrl);
   };
 
@@ -63,10 +63,11 @@ export default function Content5() {
         const ids = idsResponse?.data?.results;
         setLetters(ids);
 
+        const templateId = searchParams.get("template_id") || "1";
+        setSelectedId(Number(templateId));
+
         const res = await axios.get(
-          `${BASE_URL}/v3/typeletter/${
-            searchParams.get("template_id") || "1"
-          }/`,
+          `${BASE_URL}/v3/typeletter/${templateId}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

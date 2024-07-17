@@ -1,12 +1,13 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { BASE_URL, token } from "../../helpers/index";
+import { BASE_URL, token, typeletter_id } from "../../helpers/index";
 import { useEffect, useState } from "react";
 import ModalConf from "../ModalConf";
-import { message, Upload, Button } from "antd";
+import { message, Upload, Button, Select, Form, Alert } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import AppLoader from "../AppLoader";
 import axios from "axios";
+import "./InnUpload.css";
 
 const InnUpload = () => {
   const [uploadedData, setUploadedData] = useState(null);
@@ -18,6 +19,9 @@ const InnUpload = () => {
   const [error, setError] = useState(null);
   const [boss, setBoss] = useState([]);
   const [selectedBoss, setSelectedBoss] = useState(null); // New state variable
+
+  const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,8 +39,29 @@ const InnUpload = () => {
         setLoading(false); // Set loading to false after the request is completed
       }
     };
+    const fetchLetters = async () => {
+      setLoading(true); // Set loading to true before starting the request
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/v4/typeletter/letter3-update/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          setRows(response?.data?.results);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false); // Set loading to false after the request is completed
+      }
+    };
 
     fetchData();
+    fetchLetters();
   }, []); // Empty dependency array means this effect runs once after the initial render
 
   const params = useParams();
@@ -55,8 +80,9 @@ const InnUpload = () => {
       if (response.ok) {
         const data = await response.json();
         setUploadedData(data);
-        setIsSubmitDisabled(true); // Disable the submit button on success
-        setRows(data);
+        setIsSubmitDisabled(true);
+        message.success("Imzolashga muvaffaqiyatli yuborildi!");
+        window.location.reload();
       } else {
         const errorData = await response.json();
         throw new Error(
@@ -64,9 +90,8 @@ const InnUpload = () => {
         );
       }
     } catch (error) {
-      console.error("Error:", error);
       message.error(
-        "Jo'natishda muammo bo'ldi, iltimos yana harakat qilib ko'ring!"
+        `Jo'natishda muammo bo'ldi, iltimos yana harakat qilib ko'ring!`
       );
     } finally {
       setLoading(false);
@@ -90,7 +115,6 @@ const InnUpload = () => {
     }
 
     await handleSubmit(formData);
-    message.success("Imzolashga muvaffaqiyatli yuborildi!");
   };
 
   const handleCancel = () => {
@@ -131,11 +155,38 @@ const InnUpload = () => {
     {
       field: "inn_number",
       headerName: "INN raqami",
-      width: 400,
+      width: 200,
+    },
+    {
+      field: "send_by_staff",
+      headerName: "Holati",
+      width: 200,
+      renderCell: (params) =>
+        params.value ? (
+          <span className="text-blue-600">Yuborildi</span>
+        ) : (
+          <span className="text-orange-600">Yuborilmadi</span>
+        ),
+    },
+    {
+      field: "signed_state",
+      headerName: "Imzolanganlik holati",
+      width: 200,
+      renderCell: (params) =>
+        params.value ? (
+          <span className="text-blue-600">Imzolandi</span>
+        ) : (
+          <span className="text-orange-600">Imzolanmadi</span>
+        ),
     },
   ];
 
-  if (loading) return <AppLoader />;
+  const handleClickRow = (params) => {
+    if (localStorage.getItem("template_id") === "3") {
+      navigate(`/revison/${id}/inn_upload/${params.id}`);
+    }
+    return;
+  };
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -167,42 +218,48 @@ const InnUpload = () => {
           dagi kabi bo'lishi kerak.
         </div>
       </div>
-      <form className="flex flex-col items-center justify-center">
-        <select
-          name="user_boss"
-          id="user_boss"
-          className="p-2 border-2 mb-4 "
-          onChange={(e) => setSelectedBoss(e.target.value)}
-        >
-          {boss &&
-            boss.map((el) => (
-              <option value={el.id} key={el.id}>
-                {el.first_name} {el.last_name}
-              </option>
-            ))}
-        </select>
+      <Form className="flex flex-col items-center justify-center">
+        <Form.Item name="user_boss">
+          <Select
+            placeholder="Bossni tanlang!"
+            className="w-full "
+            onChange={(value) => setSelectedBoss(value)}
+          >
+            {boss &&
+              boss.map((el) => (
+                <Select.Option value={el.id} key={el.id}>
+                  {el.first_name} {el.last_name}
+                </Select.Option>
+              ))}
+          </Select>
+        </Form.Item>
 
-        <Upload
-          fileList={fileList}
-          onChange={handleChange}
-          beforeUpload={beforeUpload}
-          accept=".xlsx,.xls"
-          multiple={false}
-          className=""
-        >
-          <Button icon={<UploadOutlined />}>Excel Faylni yuklash</Button>
-        </Upload>
-        <Button
-          type="primary"
-          onClick={showModal}
-          style={{ marginTop: 16 }}
-          disabled={fileList.length === 0 || isSubmitDisabled} // Disable based on state
-          className="bg-[#1677ff]"
-        >
-          Yuborish
-        </Button>
-      </form>
-      {rows.length !== 0 && (
+        <Form.Item>
+          <Upload
+            style={{ color: "blue" }}
+            fileList={fileList}
+            onChange={handleChange}
+            beforeUpload={beforeUpload}
+            accept=".xlsx,.xls"
+            multiple={false}
+          >
+            <Button icon={<UploadOutlined />}>Excel Faylni yuklash</Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={showModal}
+            style={{ marginTop: 16 }}
+            disabled={fileList.length === 0 || isSubmitDisabled}
+            className="bg-[#1677ff]"
+          >
+            Yuborish
+          </Button>
+        </Form.Item>
+      </Form>
+      {rows && rows.length !== 0 && (
         <DataGrid
           className="mt-10"
           disableColumnMenu
@@ -213,13 +270,13 @@ const InnUpload = () => {
               pageSize: 10,
             },
           }}
-          // onRowClick={handleClickRow}
           pageSizeOptions={[10, 100]}
           pagination
           disableColumnResize
           disableColumnFilter
-          // disableColumnMenu
           disableColumnSelector
+          // disableRowSelectionOnClick
+          onRowClick={handleClickRow}
         />
       )}
       <ModalConf

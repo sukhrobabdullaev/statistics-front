@@ -59,20 +59,6 @@ const Navbar = () => {
         </Link>
       )}
       <div className="flex items-center gap-2 pr-4">
-        {decodedToken && !decodedToken.is_superuser && (
-          <Link>
-            <div className="relative inline-block">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-600 "></span>
-              <Badge badgeContent={4} color="primary">
-                <MdOutlineNotificationsNone
-                  color="action"
-                  size={25}
-                  className="text-gray-600 hover:text-black transition-all"
-                />
-              </Badge>
-            </div>
-          </Link>
-        )}
         <Link>
           <Tooltip title="Mening hisobim">
             <IconButton

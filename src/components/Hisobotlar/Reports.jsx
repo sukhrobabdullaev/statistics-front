@@ -1,7 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BASE_URL } from "../../helpers";
+import { BASE_URL, token } from "../../helpers";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import AppLoader from "../AppLoader";
@@ -28,8 +28,6 @@ export default function Reports() {
     navigate(newUrl);
   };
 
-  let token = localStorage.getItem("access_token");
-
   useEffect(() => {
     async function getData() {
       setLoading(true);
@@ -42,10 +40,11 @@ export default function Reports() {
         const ids = idsResponse?.data?.results;
         setLetters(ids);
 
+        const templateId = searchParams.get("template_id") || "1";
+        setSelectedId(Number(templateId));
+
         const res = await axios.get(
-          `${BASE_URL}/v3/typeletter/${
-            searchParams.get("template_id") || "1"
-          }/`,
+          `${BASE_URL}/v3/typeletter/${templateId}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -61,7 +60,7 @@ export default function Reports() {
     }
 
     getData();
-  }, [searchParams.get("template_id")]);
+  }, [searchParams]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -97,7 +96,7 @@ export default function Reports() {
         {loading ? (
           <AppLoader />
         ) : (
-          <div style={{ height: "100%", width: "70%" }}>
+          <div style={{ height: "70vh", width: "70%" }}>
             <DataGrid
               disableColumnMenu
               columns={columns}
@@ -112,7 +111,6 @@ export default function Reports() {
               pagination
               disableColumnResize
               disableColumnFilter
-              // disableColumnMenu
               disableColumnSelector
             />
           </div>

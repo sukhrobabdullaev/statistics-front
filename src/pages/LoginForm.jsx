@@ -84,7 +84,7 @@ const LoginForm = () => {
               csrfmiddlewaretoken: "{{ csrf_token }}", // Include this line for CSRF token
             }}
           >
-            <h3 className="text-center pb-6 text-lg text-gray-600 font-bold animate animation-moveLeftToRight">
+            <h3 className="text-center pb-6 text-lg text-gray-600 font-bold">
               HSAT
             </h3>
             <Form.Item
@@ -97,7 +97,7 @@ const LoginForm = () => {
               ]}
             >
               <Input
-                placeholder="Username"
+                placeholder="Loginni kiriting"
                 className="p-2 w-[250px]"
                 autoComplete="username"
               />
@@ -113,7 +113,7 @@ const LoginForm = () => {
               ]}
             >
               <Input.Password
-                placeholder="Password"
+                placeholder="Parolni kiriting"
                 className="p-2"
                 autoComplete="current-password"
               />

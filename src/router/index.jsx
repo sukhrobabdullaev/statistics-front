@@ -8,6 +8,8 @@ import SuperUser from "../pages/SuperUser";
 import BossReview from "../components/Boss/BossReview";
 import TemplateDetails from "../components/Boss/TemplateDetails";
 import Signed from "../components/Hisobotlar/Signed";
+import SignedXat from "../components/Hisobotlar/SignedXat";
+import InnUploadUpdate from "../components/Hisobotlar/InnUploadUpdate";
 
 const router = createBrowserRouter([
   {
@@ -55,10 +57,26 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/signed-letters/:id/:xat",
+    element: (
+      <RootLayout>
+        <SignedXat />
+      </RootLayout>
+    ),
+  },
+  {
     path: "/revison/:id/inn_upload",
     element: (
       <RootLayout>
         <InnUpload />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/revison/:id/inn_upload/:xat",
+    element: (
+      <RootLayout>
+        <InnUploadUpdate />
       </RootLayout>
     ),
   },
