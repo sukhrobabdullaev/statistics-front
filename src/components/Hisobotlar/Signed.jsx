@@ -10,6 +10,9 @@ import {
   DateRangeOutlined,
   DateRangeSharp,
   DateRangeTwoTone,
+  Download,
+  Mail,
+  MailLockOutlined,
   RemoveRedEye,
 } from "@mui/icons-material";
 
@@ -135,9 +138,21 @@ const Signed = () => {
           ) : (
             <div style={{ padding: 24, background: "#fff" }}>
               {letterDates.length !== 0 && (
-                <Button className="mb-4" onClick={handleDownload}>
-                  NO PAY DOWNLOAD
-                </Button>
+                <button
+                  onClick={handleDownload}
+                  className="relative flex items-center px-6 mb-4 py-3 overflow-hidden font-medium transition-all bg-indigo-500 rounded-md group"
+                >
+                  <span className="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-indigo-700 rounded group-hover:-mr-4 group-hover:-mt-4">
+                    <span className="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
+                  </span>
+                  <span className="absolute bottom-0 rotate-180 left-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-indigo-700 rounded group-hover:-ml-4 group-hover:-mb-4">
+                    <span className="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"></span>
+                  </span>
+                  <span className="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-indigo-600 rounded-md group-hover:translate-x-0"></span>
+                  <span class="relative w-full text-left text-white transition-colors duration-200 ease-in-out group-hover:text-white">
+                    Bartaraf etilmagan korxonalar
+                  </span>
+                </button>
               )}
               {content ? (
                 <div>
@@ -165,25 +180,30 @@ const Signed = () => {
                               </span>
                             </p>
                           </div>
-
-                          {/* <img
+                          <img
                             src={`https://hsat.uz${item.qr_code}`}
                             alt="QR Code"
                             style={{ marginTop: 10 }}
-                          /> */}
-                          <div className="flex gap-4">
+                          />
+                          <div className="flex gap-1 flex-col">
                             <a
                               href={mergedPdf}
                               download={`${item.company_name}-${isTemplate(
                                 typeletter_id
                               )}`}
                             >
-                              <Button onClick={() => setSelectedItem(item)}>
-                                Dowload
+                              <Button
+                                onClick={() => setSelectedItem(item)}
+                                className="flex gap-1 bg-green-400 text-white"
+                              >
+                                <Download /> Yuklab olish
                               </Button>
                             </a>
-                            <Button onClick={() => handleSigned(item.id)}>
-                              IN DETAIL
+                            <Button
+                              onClick={() => handleSigned(item.id)}
+                              className="flex gap-1 bg-orange-400 text-white"
+                            >
+                              <Mail /> Pochtaga jo'natish
                             </Button>
                           </div>
                         </Card>

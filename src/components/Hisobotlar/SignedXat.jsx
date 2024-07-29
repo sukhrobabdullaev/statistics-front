@@ -114,7 +114,7 @@ const SignedXat = () => {
                 },
               ]}
             >
-              <Select placeholder="PAY yoki NO PAY">
+              <Select placeholder="Bartaraf yoki noBartaraf">
                 <Select.Option value="Bartaraf etildi">
                   Bartaraf etildi
                 </Select.Option>

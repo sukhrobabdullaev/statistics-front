@@ -34,94 +34,97 @@ const Navbar = () => {
   };
 
   return (
-    <div className="p-2 max-w-[1400px] mx-auto flex justify-between items-center">
-      {decodedToken && !decodedToken.is_superuser ? (
-        <Link
-          to={
-            decodedToken && decodedToken.is_staff
-              ? "/staff-dashboard"
-              : "/boss-dashboard"
-          }
-        >
-          <img
-            src="/imgs/panel_hsat_logo.png"
-            alt="hsat logo"
-            className="w-28"
-          />
-        </Link>
-      ) : (
-        <Link to={decodedToken && decodedToken.is_superuser && "/superuser"}>
-          <img
-            src="/imgs/panel_hsat_logo.png"
-            alt="hsat logo"
-            className="w-28"
-          />
-        </Link>
-      )}
-      <div className="flex items-center gap-2 pr-4">
-        <Link>
-          <Tooltip title="Mening hisobim">
-            <IconButton
-              onClick={handleClick}
-              size="small"
-              sx={{ ml: 2 }}
-              aria-controls={open ? "account-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-            >
-              <AiOutlineUser
-                size={25}
-                className="text-gray-600 hover:text-black transition-all"
-              />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            anchorEl={anchorEl}
-            id="account-menu"
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: "visible",
-                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                mt: 1.5,
-                "& .MuiAvatar-root": {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                "&:before": {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: "background.paper",
-                  transform: "translateY(-50%) rotate(45deg)",
-                  zIndex: 0,
-                },
-              },
-            }}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+    <div className="border-b bg-gray-100">
+      <div className="p-2 max-w-[1400px]  mx-auto flex justify-between items-center">
+        {decodedToken && !decodedToken.is_superuser ? (
+          <Link
+            to={
+              decodedToken && decodedToken.is_staff
+                ? "/staff-dashboard"
+                : "/boss-dashboard"
+            }
           >
-            <MenuItem onClick={handleClose}>
-              <Avatar /> {decodedToken && decodedToken.username}
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleLogout}>
-              <ListItemIcon>
-                <Logout fontSize="small" />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
-          </Menu>
-        </Link>
+            <img
+              src="/imgs/panel_hsat_logo.png"
+              alt="hsat logo"
+              className="w-28"
+            />
+          </Link>
+        ) : (
+          <Link to={decodedToken && decodedToken.is_superuser && "/superuser"}>
+            <img
+              src="/imgs/panel_hsat_logo.png"
+              alt="hsat logo"
+              className="w-28"
+            />
+          </Link>
+        )}
+        <div className="flex items-center gap-2 pr-4">
+          <Link>
+            <Tooltip title="Mening hisobim">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                <AiOutlineUser
+                  size={25}
+                  className="text-gray-600 hover:text-black transition-all"
+                />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 1.5,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  "&:before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              itemHoverBg="red"
+            >
+              <MenuItem onClick={handleClose}>
+                <Avatar /> {decodedToken && decodedToken.username}
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleLogout}>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Menu>
+          </Link>
+        </div>
       </div>
     </div>
   );

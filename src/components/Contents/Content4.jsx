@@ -3,7 +3,7 @@ import axios from "axios";
 import { BASE_URL, token } from "../../helpers";
 import AppLoader from "../AppLoader";
 import { message } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Content4 = () => {
   const [data, setData] = useState(null);
@@ -79,7 +79,33 @@ const Content4 = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center flex-col items-center">
+      <div className="flex gap-3 mb-4">
+        <Link
+          target="__blank"
+          to={
+            "https://docs.google.com/document/d/1mBaf7sX1ypy2wYSQ5BM6H59kSAnC2UzNlVp5S4TKn8Y/edit?usp=sharing"
+          }
+        >
+          Shablon 1
+        </Link>
+        <Link
+          to={
+            "https://docs.google.com/document/d/1mBaf7sX1ypy2wYSQ5BM6H59kSAnC2UzNlVp5S4TKn8Y/edit?usp=sharing"
+          }
+          target="__blank"
+        >
+          Shablon 2
+        </Link>
+        <Link
+          to={
+            "https://docs.google.com/document/d/1mBaf7sX1ypy2wYSQ5BM6H59kSAnC2UzNlVp5S4TKn8Y/edit?usp=sharing"
+          }
+          target="__blank"
+        >
+          Shablon 3
+        </Link>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4 w-96">
         <div className="space-y-2">
           <label
@@ -118,14 +144,14 @@ const Content4 = () => {
             htmlFor="title"
             className="block text-base font-medium text-gray-700"
           >
-            Kompaniya
+            Hisobot nomi
           </label>
           <input
             type="text"
             id="title"
             name="title"
             className="appearance-none border border-gray-400 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-            placeholder="title"
+            placeholder="shu yerga yozing"
             required
           />
         </div>
@@ -140,7 +166,7 @@ const Content4 = () => {
             id="body"
             name="body"
             className="appearance-none border border-gray-400 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-            placeholder="template"
+            placeholder="shu yerga yozing"
             required
           ></textarea>
         </div>

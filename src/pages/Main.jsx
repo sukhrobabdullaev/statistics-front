@@ -70,11 +70,11 @@ const Main = () => {
               icon: <UserOutlined />,
               label: "Asosiy Panel",
             },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "KTYADR bazasi",
-            },
+            // {
+            //   key: "2",
+            //   icon: <VideoCameraOutlined />,
+            //   label: "KTYADR bazasi",
+            // },
             {
               key: "3",
               icon: iconMenu3,

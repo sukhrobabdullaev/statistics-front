@@ -1,12 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { BASE_URL, token, typeletter_id } from "../../helpers/index";
+import { BASE_URL, token } from "../../helpers/index";
 import { useEffect, useState } from "react";
 import ModalConf from "../ModalConf";
 import { message, Upload, Button, Select, Form, Alert } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import AppLoader from "../AppLoader";
 import axios from "axios";
+// import CustomFooter from "../CustomFooter";
 import "./InnUpload.css";
 
 const InnUpload = () => {
@@ -149,7 +150,7 @@ const InnUpload = () => {
     { field: "id", headerName: "ID", width: 70 },
     {
       field: "company_name",
-      headerName: "Kompaniya",
+      headerName: "Korxona nomi",
       width: 400,
     },
     {
@@ -277,6 +278,29 @@ const InnUpload = () => {
           disableColumnSelector
           // disableRowSelectionOnClick
           onRowClick={handleClickRow}
+          localeText={{
+            noRowsLabel: "Ma'lumot mabjud emas",
+            footerRowSelected: (count) =>
+              count !== 1
+                ? `${count.toLocaleString()} qatorlar tanlandi`
+                : `${count.toLocaleString()} qator tanlandi`,
+            footerTotalRows: "Total Rows:",
+            footerTotalVisibleRows: (visibleCount, totalCount) =>
+              `${totalCount.toLocaleString()} ning ${visibleCount.toLocaleString()}`,
+            footerPaginationRowsPerPage: "sahifada qatorlar:",
+          }}
+          sx={{
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: "rgb(8 145 178)",
+            },
+            "& .MuiDataGrid-cell": {
+              backgroundColor: "rgb(168 85 247)",
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: "rgb(132 204 22)",
+            },
+            color: "white",
+          }}
         />
       )}
       <ModalConf

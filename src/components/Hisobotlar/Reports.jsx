@@ -112,6 +112,29 @@ export default function Reports() {
               disableColumnResize
               disableColumnFilter
               disableColumnSelector
+              localeText={{
+                noRowsLabel: "Ma'lumot mabjud emas",
+                footerRowSelected: (count) =>
+                  count !== 1
+                    ? `${count.toLocaleString()} qatorlar tanlandi`
+                    : `${count.toLocaleString()} qator tanlandi`,
+                footerTotalRows: "Total Rows:",
+                footerTotalVisibleRows: (visibleCount, totalCount) =>
+                  `${totalCount.toLocaleString()} ning ${visibleCount.toLocaleString()}`,
+                footerPaginationRowsPerPage: "sahifada qatorlar:",
+              }}
+              sx={{
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: "rgb(8 145 178)",
+                },
+                "& .MuiDataGrid-cell": {
+                  backgroundColor: "rgb(168 85 247)",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  backgroundColor: "rgb(132 204 22)",
+                },
+                color: "white",
+              }}
             />
           </div>
         )}
