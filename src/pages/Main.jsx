@@ -13,10 +13,16 @@ import Content2 from "../components/Contents/Content2";
 import Content3 from "../components/Contents/Content3";
 import { decodedToken } from "../helpers";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Add, SignLanguage, SignLanguageOutlined } from "@mui/icons-material";
+import {
+  Add,
+  MailLockRounded,
+  SignLanguage,
+  SignLanguageOutlined,
+} from "@mui/icons-material";
 import Content4 from "../components/Contents/Content4";
 import Content5 from "../components/Contents/Content5";
 import "./Main.css";
+import Content6 from "../components/Contents/Content6";
 
 const { Header, Sider, Content } = Layout;
 
@@ -54,7 +60,10 @@ const Main = () => {
   const labelMenu4 = !isBoss && "Hisobot yaratish";
 
   const iconMenu5 = !isBoss && <SignLanguageOutlined />;
-  const labelMenu5 = !isBoss && "Imzolangan xatlar";
+  const labelMenu5 = !isBoss && "Baholash";
+
+  const iconMenu6 = !isBoss && <MailLockRounded />;
+  const labelMenu6 = !isBoss && "Pochtaga yuborish";
 
   return (
     <Layout>
@@ -85,6 +94,11 @@ const Main = () => {
               key: "5",
               icon: iconMenu5,
               label: labelMenu5,
+            },
+            !isBoss && {
+              key: "6",
+              icon: iconMenu6,
+              label: labelMenu6,
             },
           ].filter(Boolean)}
         />
@@ -120,6 +134,7 @@ const Main = () => {
           {selectedItem === "3" && <Content3 />}
           {selectedItem === "4" && <Content4 />}
           {selectedItem === "5" && <Content5 />}
+          {selectedItem === "6" && <Content6 />}
         </Content>
       </Layout>
     </Layout>

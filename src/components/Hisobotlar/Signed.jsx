@@ -185,7 +185,7 @@ const Signed = () => {
                             alt="QR Code"
                             style={{ marginTop: 10 }}
                           />
-                          <div className="flex gap-1 flex-col">
+                          <div className="flex gap-1">
                             <a
                               href={mergedPdf}
                               download={`${item.company_name}-${isTemplate(
@@ -201,9 +201,9 @@ const Signed = () => {
                             </a>
                             <Button
                               onClick={() => handleSigned(item.id)}
-                              className="flex gap-1 bg-orange-400 text-white"
+                              className="flex gap-1 bg-orange-400 w-1/2 text-white"
                             >
-                              <Mail /> Pochtaga jo'natish
+                              Baholash
                             </Button>
                           </div>
                         </Card>
