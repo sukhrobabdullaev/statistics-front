@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 3004
 
 # Ilovani ishga tushirish
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
