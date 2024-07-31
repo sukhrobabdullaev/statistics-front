@@ -72,7 +72,7 @@ const Navbar = () => {
               >
                 <AiOutlineUser
                   size={25}
-                  className="text-gray-600 hover:text-black transition-all"
+                  className="text-blue-600 hover:text-black transition-all"
                 />
               </IconButton>
             </Tooltip>

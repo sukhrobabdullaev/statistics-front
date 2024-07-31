@@ -81,15 +81,24 @@ const Content4 = () => {
   return (
     <div className="flex justify-center flex-col items-center">
       <div className="flex gap-3 mb-4">
-        <Link
-          target="__blank"
-          to={
-            "https://docs.google.com/document/d/1mBaf7sX1ypy2wYSQ5BM6H59kSAnC2UzNlVp5S4TKn8Y/edit?usp=sharing"
-          }
-        >
-          Shablon 1
-        </Link>
-        <Link
+        {options &&
+          options.map((el) => (
+            <Link
+              key={el.id}
+              target="__blank"
+              to={
+                "https://docs.google.com/document/d/1mBaf7sX1ypy2wYSQ5BM6H59kSAnC2UzNlVp5S4TKn8Y/edit?usp=sharing"
+              }
+              className="cursor-pointer font-semibold overflow-hidden relative z-100 border border-green-500 group px-4 py-2 w-[200px]"
+            >
+              <span className="relative z-10 text-green-500 group-hover:text-white text-xl duration-500">
+                {el.name}
+              </span>
+              <span className="absolute w-full h-full bg-green-500 -left-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:left-0 duration-500"></span>
+              <span className="absolute w-full h-full bg-green-500 -right-32 top-0 -rotate-45 group-hover:rotate-0 group-hover:right-0 duration-500"></span>
+            </Link>
+          ))}
+        {/* <Link
           to={
             "https://docs.google.com/document/d/1mBaf7sX1ypy2wYSQ5BM6H59kSAnC2UzNlVp5S4TKn8Y/edit?usp=sharing"
           }
@@ -104,9 +113,9 @@ const Content4 = () => {
           target="__blank"
         >
           Shablon 3
-        </Link>
+        </Link> */}
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4 w-96">
+      <form onSubmit={handleSubmit} className="space-y-4 w-[620px]">
         <div className="space-y-2">
           <label
             htmlFor="typeletter"
@@ -114,7 +123,7 @@ const Content4 = () => {
           >
             Xat turini tanlang
           </label>
-          <div className="inline-block relative w-96">
+          <div className="inline-block relative w-[620px]">
             <select
               id="typeletter"
               name="typeletter"
@@ -123,7 +132,11 @@ const Content4 = () => {
             >
               {options &&
                 options.map((option) => (
-                  <option key={option.id} value={option.id}>
+                  <option
+                    key={option.id}
+                    className="px-4 py-2 cursor-pointer hover:bg-red-400"
+                    value={option.id}
+                  >
                     {option.name}
                   </option>
                 ))}
@@ -167,6 +180,7 @@ const Content4 = () => {
             name="body"
             className="appearance-none border border-gray-400 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
             placeholder="shu yerga yozing"
+            rows={8}
             required
           ></textarea>
         </div>

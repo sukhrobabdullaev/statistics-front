@@ -5,6 +5,7 @@ import { BASE_URL, token } from "../../helpers";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import AppLoader from "../AppLoader";
+import "./InnUpload.css";
 
 export default function Reports() {
   const [letters, setLetters] = useState([]);
@@ -96,7 +97,7 @@ export default function Reports() {
         {loading ? (
           <AppLoader />
         ) : (
-          <div style={{ height: "70vh", width: "70%" }}>
+          <div style={{ height: "70vh", width: "70%", cursor: "pointer" }}>
             <DataGrid
               disableColumnMenu
               columns={columns}
@@ -125,15 +126,16 @@ export default function Reports() {
               }}
               sx={{
                 "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "rgb(8 145 178)",
+                  backgroundColor: "rgba(0,0,255,0.6)",
                 },
-                "& .MuiDataGrid-cell": {
-                  backgroundColor: "rgb(168 85 247)",
-                },
+                // "& .MuiDataGrid-cell": {
+                //   backgroundColor: "#08e8de",
+                // },
                 "& .MuiDataGrid-footerContainer": {
-                  backgroundColor: "rgb(132 204 22)",
+                  backgroundColor: "rgba(0,0,255,0.6)",
+                  color: "white",
                 },
-                color: "white",
+                // color: "white",
               }}
             />
           </div>

@@ -16,6 +16,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Add, SignLanguage, SignLanguageOutlined } from "@mui/icons-material";
 import Content4 from "../components/Contents/Content4";
 import Content5 from "../components/Contents/Content5";
+import "./Main.css";
 
 const { Header, Sider, Content } = Layout;
 
@@ -60,8 +61,8 @@ const Main = () => {
       <Sider trigger={null} collapsible collapsed={!collapsed} className="pt-3">
         <Menu
           mode="inline"
-          className=""
           defaultSelectedKeys={["1"]}
+          className="custom-bg"
           selectedKeys={[selectedItem]}
           onClick={({ key }) => handleMenuItemClick(key)}
           items={[
@@ -70,11 +71,6 @@ const Main = () => {
               icon: <UserOutlined />,
               label: "Asosiy Panel",
             },
-            // {
-            //   key: "2",
-            //   icon: <VideoCameraOutlined />,
-            //   label: "KTYADR bazasi",
-            // },
             {
               key: "3",
               icon: iconMenu3,

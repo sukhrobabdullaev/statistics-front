@@ -223,7 +223,10 @@ const InnUpload = () => {
         <Form.Item name="user_boss">
           <Select
             placeholder="Bossni tanlang!"
-            className="w-full "
+            className="flex-1"
+            style={{
+              width: 175,
+            }}
             onChange={(value) => setSelectedBoss(value)}
           >
             {boss &&
@@ -291,15 +294,12 @@ const InnUpload = () => {
           }}
           sx={{
             "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "rgb(8 145 178)",
+              backgroundColor: "rgba(0,0,255,0.4)",
             },
-            "& .MuiDataGrid-cell": {
-              backgroundColor: "rgb(168 85 247)",
-            },
+
             "& .MuiDataGrid-footerContainer": {
-              backgroundColor: "rgb(132 204 22)",
+              backgroundColor: "rgba(0,0,255,0.4)",
             },
-            color: "white",
           }}
         />
       )}
