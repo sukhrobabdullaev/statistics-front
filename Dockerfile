@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # 3001 portni ochish
-EXPOSE 3000
+EXPOSE 3004
 
 
 # Ilovani ishga tushirish
