@@ -13,7 +13,7 @@ env:
   SSH_HOST: ${{ secrets.SERVER_IP }}
   SSH_USER: ${{ secrets.SERVER_USERNAME }}
   SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-  PORT: 3004:3004
+  PORT: 3004:3000
 
 jobs:
   build_and_push:
