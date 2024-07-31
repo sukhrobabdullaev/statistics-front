@@ -1,23 +1,26 @@
-# Rasm yaratish uchun bazaviy image sifatida Node.js rasmidan foydalanamiz
-FROM node:14-alpine
+# Node.js 18-alpine bazaviy rasmidan foydalanamiz
+FROM node:18-alpine
 
-# Ishchi katalog yaratish va unga o'tish
+# Ishchi katalogni yaratamiz va unga o'tamiz
 WORKDIR /app
 
-# package.json va package-lock.json fayllarini ishchi katalogga nusxalash
+# package.json va package-lock.json fayllarini ishchi katalogga nusxalaymiz
 COPY package*.json ./
 
-# Node.js paketlarini o'rnatish
+# Node.js qaramliklarini o'rnatamiz
 RUN npm install
 
-# Ilovaning barcha kodini ishchi katalogga nusxalash
+# Barcha kodni ishchi katalogga nusxalaymiz
 COPY . .
 
 # Ilovani build qilish
 RUN npm run build
 
-# 3001 portni ochish
-EXPOSE 3004
+# Build qilingan fayllarni servis qiladigan web serverni o'rnatamiz
+RUN npm install -g serve
 
-# Ilovani ishga tushirish
-CMD ["npm", "run", "dev"]
+# Build qilingan ilovani serve qilish
+CMD ["serve", "-s", "dist"]
+
+# 3000-portni ochamiz (standart port)
+EXPOSE 3004
