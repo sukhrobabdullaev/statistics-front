@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
-  VideoCameraOutlined,
   UserOutlined,
   UsergroupDeleteOutlined,
 } from "@ant-design/icons";
@@ -16,13 +15,14 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Add,
   MailLockRounded,
-  SignLanguage,
+  SignalCellular0Bar,
   SignLanguageOutlined,
 } from "@mui/icons-material";
 import Content4 from "../components/Contents/Content4";
 import Content5 from "../components/Contents/Content5";
 import "./Main.css";
 import Content6 from "../components/Contents/Content6";
+import Content7 from "../components/Contents/Content7";
 
 const { Header, Sider, Content } = Layout;
 
@@ -65,6 +65,9 @@ const Main = () => {
   const iconMenu6 = !isBoss && <MailLockRounded />;
   const labelMenu6 = !isBoss && "Pochtaga yuborish";
 
+  const iconMenu7 = !isBoss && <SignalCellular0Bar />;
+  const labelMenu7 = !isBoss && "Imzolangan xatlar";
+
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={!collapsed} className="pt-3">
@@ -99,6 +102,11 @@ const Main = () => {
               key: "6",
               icon: iconMenu6,
               label: labelMenu6,
+            },
+            !isBoss && {
+              key: "7",
+              icon: iconMenu7,
+              label: labelMenu7,
             },
           ].filter(Boolean)}
         />
@@ -135,6 +143,7 @@ const Main = () => {
           {selectedItem === "4" && <Content4 />}
           {selectedItem === "5" && <Content5 />}
           {selectedItem === "6" && <Content6 />}
+          {selectedItem === "7" && <Content7 />}
         </Content>
       </Layout>
     </Layout>

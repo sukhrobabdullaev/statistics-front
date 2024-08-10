@@ -6,12 +6,10 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
-import { MdOutlineNotificationsNone } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUser } from "react-icons/ai";
 import { useState } from "react";
 import { decodedToken } from "../helpers";
-import { Badge } from "@mui/material";
 
 const Navbar = () => {
   let navigate = useNavigate();

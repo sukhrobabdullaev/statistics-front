@@ -10,6 +10,7 @@ import TemplateDetails from "../components/Boss/TemplateDetails";
 import Signed from "../components/Hisobotlar/Signed";
 import SignedXat from "../components/Hisobotlar/SignedXat";
 import InnUploadUpdate from "../components/Hisobotlar/InnUploadUpdate";
+import SignedContent from "../components/Hisobotlar/SignedContent";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,14 @@ const router = createBrowserRouter([
     element: (
       <RootLayout>
         <SignedXat />
+      </RootLayout>
+    ),
+  },
+  {
+    path: "/signed/:id",
+    element: (
+      <RootLayout>
+        <SignedContent />
       </RootLayout>
     ),
   },
