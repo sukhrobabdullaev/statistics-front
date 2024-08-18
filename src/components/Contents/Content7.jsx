@@ -5,21 +5,23 @@ import { BASE_URL, token } from "../../helpers";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import AppLoader from "../AppLoader";
-import "./InnUpload.css";
+import { useData } from "../../context/DataContext";
 
-export default function Reports() {
+export default function Content7() {
   const [letters, setLetters] = useState([]);
   const [rows, setRows] = useState([]);
   const [letterName, setLetterName] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(1);
+  const { setSignedId } = useData();
 
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const handleClickRow = (params) => {
     const id = params.row.id;
-    navigate(`/revison/${id}`);
+    navigate(`/signed/${id}`);
+    setSignedId(id)
   };
 
   const selectId = (id) => {
@@ -128,14 +130,10 @@ export default function Reports() {
                 "& .MuiDataGrid-columnHeaders": {
                   backgroundColor: "rgba(0,0,255,0.6)",
                 },
-                // "& .MuiDataGrid-cell": {
-                //   backgroundColor: "#08e8de",
-                // },
                 "& .MuiDataGrid-footerContainer": {
                   backgroundColor: "rgba(0,0,255,0.6)",
                   color: "white",
                 },
-                // color: "white",
               }}
             />
           </div>

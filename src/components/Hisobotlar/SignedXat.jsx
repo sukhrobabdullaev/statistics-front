@@ -88,19 +88,26 @@ const SignedXat = () => {
         <div>
           {signed && (
             <div>
-              <Title level={4}>KOMPANIYA: {signed.company_name}</Title>
-              <Paragraph className="font-semibold">
-                XAT VAQTI:
-                <span className="font-normal"> {signed.letter_date}</span>
-              </Paragraph>
-              <Paragraph className="font-semibold">
-                XAT TURI:
-                <span className="font-normal"> {signed.typeletter}</span>
-              </Paragraph>
-              <Paragraph className="font-semibold">
-                XAT HOLATI:
-                <span className="font-normal"> {signed.pay}</span>
-              </Paragraph>
+              <Title
+                level={4}
+                className="text-3xl md:text-3xl pl-2 my-2 border-l-4  font-sans font-bold border-teal-400 "
+              >
+                KOMPANIYA: {signed.company_name}
+              </Title>
+              <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 bg-white shadow border my-4">
+                <Paragraph className="font-semibold mt-4">
+                  XAT VAQTI:
+                  <span className="font-normal"> {signed.letter_date}</span>
+                </Paragraph>
+                <Paragraph className="font-semibold mt-4">
+                  XAT TURI:
+                  <span className="font-normal"> {signed.typeletter}</span>
+                </Paragraph>
+                <Paragraph className="font-semibold mt-4">
+                  XAT HOLATI:
+                  <span className="font-normal"> {signed.pay}</span>
+                </Paragraph>
+              </div>
             </div>
           )}
 

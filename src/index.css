@@ -32,3 +32,40 @@
 .animation-moveRightToLeft {
   animation: moveRightToLeft 3s linear infinite; /* Adjust the duration as needed */
 }
+
+.blue-row {
+  background-color: rgba(0, 0, 255, 0.6) !important;
+  color: white;
+}
+
+.orange-row {
+  background-color: rgba(255, 213, 0, 0.6) !important;
+  color: black;
+}
+
+.css-1h6anv0-MuiDataGrid-root .MuiDataGrid-row:hover {
+  background-color: #08e8de !important;
+}
+
+.ant-menu-item:not(.ant-menu-item-selected):hover {
+  background-color: #acc6da !important;
+}
+.ant-menu-item-selected {
+  background-color: #08e8de !important;
+  color: white !important;
+}
+/* .css-1eaqvnp-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  background-color: #08e8de !important;
+  color: white !important;
+} */
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
+  background-color: #acc6da !important;
+}
+.css-nk9r27-MuiDataGrid-root .MuiDataGrid-row:hover {
+  background-color: #08e8de !important;
+}
+
+.css-q0es5w-MuiDataGrid-root .MuiDataGrid-row:hover {
+  background-color: #08e8de !important;
+}

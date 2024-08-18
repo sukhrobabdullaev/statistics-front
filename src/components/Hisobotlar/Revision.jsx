@@ -96,7 +96,9 @@ const Revision = () => {
         <AppLoader />
       ) : (
         <div className="max-w-[1200px] h-full mx-auto mt-5 flex flex-col gap-6">
-          <h1 className="text-3xl font-semibold">{template.title}</h1>
+          <h1 className="text-3xl md:text-3xl pl-2 my-2 border-l-4  font-sans font-bold border-teal-400 ">
+            {template.title}
+          </h1>
           <Editor
             apiKey={API_KEY}
             init={{

@@ -119,7 +119,7 @@ export default function Content5() {
         {loading ? (
           <AppLoader />
         ) : (
-          <div style={{ height: "100%", width: "70%" }}>
+          <div style={{ height: "100%", width: "70%", cursor: "pointer" }}>
             <DataGrid
               disableColumnMenu
               columns={columns}
@@ -149,15 +149,14 @@ export default function Content5() {
               }}
               sx={{
                 "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: "rgb(8 145 178)",
+                  backgroundColor: "rgba(0,0,255,0.6)",
                 },
-                "& .MuiDataGrid-cell": {
-                  backgroundColor: "rgb(168 85 247)",
-                },
+                // "& .MuiDataGrid-cell": {
+                //   backgroundColor: "rgb(168 85 247)",
+                // },
                 "& .MuiDataGrid-footerContainer": {
-                  backgroundColor: "rgb(132 204 22)",
+                  backgroundColor: "rgba(0,0,255,0.6)",
                 },
-                color: "white",
               }}
             />
           </div>

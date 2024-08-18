@@ -20,7 +20,7 @@ const FileMerger = ({ pdfUrl, qrCodeUrl, setMergedPdf }) => {
         const { width, height } = qrCodeImage.scale(1);
         firstPage.drawImage(qrCodeImage, {
           x: firstPage.getWidth() - width - 256,
-          y: 70,
+          y: 60,
           width,
           height,
         });

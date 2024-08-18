@@ -1,31 +1,53 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BASE_URL, token } from "../../helpers";
+import { BASE_URL, token, typeletter_id } from "../../helpers";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import AppLoader from "../AppLoader";
-import "./InnUpload.css";
+import { useData } from "../../context/DataContext";
 
-export default function Reports() {
+export default function Content6() {
   const [letters, setLetters] = useState([]);
   const [rows, setRows] = useState([]);
   const [letterName, setLetterName] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [selectedId, setSelectedId] = useState(1);
+  const { setLetterDates } = useData();
 
   let [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const handleClickRow = (params) => {
+  const handleClickRow = async (params) => {
     const id = params.row.id;
-    navigate(`/revison/${id}`);
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/v4/typeletter/letter-date/`,
+        { typeletter_id, template_id: id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setLetterDates(response.data);
+        navigate(`/signed-letters/${id}`);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const selectId = (id) => {
     localStorage.setItem("template_id", id);
     setSelectedId(id);
-    const newUrl = `${window.location.pathname}?step_id=3&template_id=${id}`;
+    const newUrl = `${window.location.pathname}?step_id=5&template_id=${id}`;
     navigate(newUrl);
   };
 
@@ -61,7 +83,7 @@ export default function Reports() {
     }
 
     getData();
-  }, [searchParams]);
+  }, [searchParams.get("template_id")]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -97,7 +119,7 @@ export default function Reports() {
         {loading ? (
           <AppLoader />
         ) : (
-          <div style={{ height: "70vh", width: "70%", cursor: "pointer" }}>
+          <div style={{ height: "100%", width: "70%", cursor: "pointer" }}>
             <DataGrid
               disableColumnMenu
               columns={columns}
@@ -112,6 +134,7 @@ export default function Reports() {
               pagination
               disableColumnResize
               disableColumnFilter
+              // disableColumnMenu
               disableColumnSelector
               localeText={{
                 noRowsLabel: "Ma'lumot mabjud emas",
@@ -129,17 +152,16 @@ export default function Reports() {
                   backgroundColor: "rgba(0,0,255,0.6)",
                 },
                 // "& .MuiDataGrid-cell": {
-                //   backgroundColor: "#08e8de",
+                //   backgroundColor: "rgb(168 85 247)",
                 // },
                 "& .MuiDataGrid-footerContainer": {
                   backgroundColor: "rgba(0,0,255,0.6)",
-                  color: "white",
                 },
-                // color: "white",
               }}
             />
           </div>
         )}
+        {error && <div style={{ color: "red" }}>Error: {error}</div>}
       </div>
     </>
   );
