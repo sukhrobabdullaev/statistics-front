@@ -22,5 +22,5 @@ RUN npm install -g serve
 # Build qilingan ilovani serve qilish
 CMD ["serve", "-s", "dist"]
 
-# 3000-portni ochamiz (standart port)
+# 3000-portni ochamiz (standart port))
 EXPOSE 3004
